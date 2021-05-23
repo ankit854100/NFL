@@ -1,0 +1,158 @@
+.optimizer {
+  display: flex;
+  color: #707070;
+  background-color: #fff;
+  font-size: 13px;
+}
+
+.optimizer-left {
+  width: 95%;
+}
+
+.optimizer-right {
+  width: 20%;
+}
+
+.optimizer-top {
+  display: flex;
+  width: 100%;
+
+  /* justify-content: space-evenly; */
+}
+
+.first-col {
+  display: flex;
+  flex-direction: column;
+  /* width: 70%; */
+  /* justify-content: space-evenly; */
+}
+.first-col-row {
+  display: flex;
+  border-bottom: 1px solid #707070;
+  padding: 1rem;
+  /* justify-content: space-evenly; */
+}
+
+.second-div {
+  border: none !important;
+}
+
+.second-col {
+  display: flex;
+  flex-direction: column;
+  /* width: 30%; */
+  padding: 1rem;
+}
+
+.second-col-inner {
+  padding: 0 1rem;
+  border-left: 1px solid #707070;
+}
+
+.optimizer-bottom {
+  display: flex;
+  /* justify-content: space-evenly; */
+  width: 100%;
+  border-top: 1px solid #707070;
+  padding: 1rem;
+}
+
+.flex-position-container {
+  display: inline-block;
+  /* margin-left: 0.25rem; */
+  margin-right: 0.25rem;
+}
+
+/* .flex-position-container input {
+  width: 28px;
+  border: none;
+
+  color: #707071;
+} */
+
+.input-container {
+  display: inline-block;
+  border: 1px solid #707070;
+  padding: 0.25rem;
+  margin-left: 0.25rem;
+}
+
+.span-input-container {
+  display: flex;
+}
+
+.percent {
+  width: 28px;
+  border: none;
+  color: #707071;
+}
+
+.box {
+  width: 90%;
+  border-left: 1px solid #707070;
+  padding: 0.5rem 1rem;
+  min-width: 250px;
+}
+
+.left-most {
+  border: none !important;
+}
+.heading-text {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 700;
+  display: inline-block;
+  /* vertical-align: top; */
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.optimizer-dropdown {
+  min-height: 2.5rem;
+  max-height: 2.5rem;
+  color: #707071;
+  padding: 0.5rem;
+  border-color: #dddddd !important;
+  border-radius: 0.15rem;
+  margin: 0 10px 10px 0;
+  min-width: 9.125rem;
+  /* display: block; */
+}
+
+.optimizer-dropdown:focus {
+  outline: none;
+}
+
+.fa-info-circle {
+  color: #057df7;
+  font-size: 15px;
+  line-height: 1;
+  margin-right: 0.5rem;
+}
+
+.position-wrapper {
+  background-color: #e8e9e9;
+}
+
+.team-div {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 -1px 0 0;
+  min-width: 30px;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 700;
+  padding: 1rem 0.25rem;
+  text-align: center;
+  border: 0.5px solid #e8e9e9;
+  min-width: 2.5rem;
+  border: 1px solid #dddddd;
+}
+
+.team-div:hover {
+  background-color: #fff;
+}
+.team-div input {
+  display: none;
+  width: 2.5rem;
+}
