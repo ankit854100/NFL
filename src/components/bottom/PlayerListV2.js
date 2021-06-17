@@ -298,7 +298,8 @@ function PlayerList(props) {
               <InfiniteScroll
                 dataLength={props.all.length}
                 next={getMoreData}
-                hasMore={props.all.length !== props.total.length}
+                // hasMore={props.all.length !== props.total.length}
+                hasMore={position === "ALL" ? props.all.length !== props.total.length: false}
                 loader={<h4>Loading...</h4>}
                 scrollableTarget="table-container"
             >
