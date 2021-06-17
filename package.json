@@ -22,6 +22,7 @@
     "redux": "4.1.0",
     "redux-devtools-extension": "2.13.9"
   },
+  "proxy": "https://api.fantasynerds.com/",
   "devDependencies": {
     "@babel/runtime": "7.13.8",
     "typescript": "4.1.3"
