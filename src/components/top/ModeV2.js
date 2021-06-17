@@ -3,7 +3,7 @@ import "./mode.css";
 import Option from "./Option";
 import GameBox from "./GameBox";
 import { game } from "../../data";
-import selectTeam, {selectSlate, setClearSelected, setGames, setIcons, unselectTeam} from "../../redux/GameBox/actionContainer";
+import selectTeam, {selectSlate, setClearSelected, setGames, setIcons, unselectTeam, setSlatePlayers, setClearSlatePlayer} from "../../redux/GameBox/actionContainer";
 import {connect} from "react-redux";
 
 const gameTypesDraftKings = ["CLASSIC", "TIERS", "SHOWDOWN"];
@@ -15,7 +15,8 @@ const mapStateToProps = (state) =>{
     selectedList: state.gamebox.selectedList,
     selectedSlate: state.gamebox.selectedSlate,
     games: state.gamebox.games,
-    icons: state.gamebox.icons
+    icons: state.gamebox.icons,
+    slatePlayers: state.gamebox.slatePlayers
   };
 }
 
@@ -26,7 +27,9 @@ const mapDispatchToProps = (dispatch) => {
     selectSlate: (value) => dispatch(selectSlate(value)),
     setClearSelected: () => dispatch(setClearSelected()),
     setGames: (value) => dispatch(setGames(value)),
-    setIcons: (value) => dispatch(setIcons(value))
+    setIcons: (value) => dispatch(setIcons(value)),
+    setSlatePlayers: (value) => dispatch(setSlatePlayers(value)),
+    setClearSlatePlayer: (value) => dispatch(setClearSlatePlayer())
   };
 }
 
@@ -46,6 +49,9 @@ function Mode(props) {
   const [games, setGames] = useState([]);
   const [gameLoaded, setGameLoaded] = useState(false);
   const [gameError, setGameError] = useState(null);
+
+  const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
+  const [isPlayerError, setIsPlayerError] = useState(null);
 
   useEffect(() => {
     fetch("https://api.fantasynerds.com/v1/nfl/dfs-slates?apikey=TEST")
@@ -114,6 +120,7 @@ function Mode(props) {
     // setMatchList([]);
 
     setDropdownVal(e.target.value);
+    loadPlayersData();
 
     for(let i = 0; i < slates.length; i++){
       if(slates[i].slateId === e.target.value){
@@ -148,6 +155,26 @@ function Mode(props) {
       )
       setGames(tmp);
       props.setGames(tmp);
+  }
+
+  async function loadPlayersData(){
+    fetch("https://api.fantasynerds.com/v1/nfl/dfs?apikey=TEST&slateId=")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setIsPlayerLoaded(true);
+          props.setClearSlatePlayer();
+          result.players.forEach((player, index) => {
+              props.setSlatePlayers({...player, isChecked: false, isLocked: false});
+          });
+          
+          props.allowPlayerList(true);
+        },
+        (error) => {
+          setIsPlayerLoaded(true);
+          setIsPlayerError(error);
+        }
+      )
   }
 
   function mainOnClick() {

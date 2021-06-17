@@ -8,7 +8,10 @@ import {
   ALL,
   MY_PLAYER,
   EXCLUDED_PLAYER,
-  LOCKED_PLAYER
+  LOCKED_PLAYER,
+  CALCULATE_COST,
+  CLEAR_ALL,
+  TOTAL
 } from "./ActionTypes";
 
 function setAllPlayer(value) {
@@ -75,15 +78,34 @@ function unLockPlayer(value) {
 }
 
 function changeFPTS(value) {
-  // console.log(value, value.id, value.fpts);
   return {
     type: FPTS,
     payload: value
   };
 }
 
+function setCalculateCost(){
+  return{
+    type: CALCULATE_COST
+  }
+}
+
+function setClearAll(){
+  return {
+    type: CLEAR_ALL
+  }
+}
+
+function setTotal(value){
+  return {
+    type: TOTAL,
+    payload: value
+  }
+}
+
 export default checked;
 export {
+  setClearAll,
   chainPlayer,
   lockPlayer,
   changeFPTS,
@@ -92,5 +114,7 @@ export {
   setAllPlayer,
   setExcludedPlayer,
   setLockedPlayer,
-  setMyPlayer
+  setMyPlayer, 
+  setCalculateCost,
+  setTotal
 };

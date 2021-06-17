@@ -108,58 +108,6 @@ function Optimize(props) {
   const [DST, setDST] = useState(true);
   const [projOwn, setProjOwn] = useState(100);
 
-  // useEffect(() => {
-  //   // manageExcludedPlayer();
-  //   let arr = [];
-  //   for (let i = 0; i < playersData.length; i++) {
-  //     if (
-  //       playersData[i].salary < props.salaryRange.first ||
-  //       playersData[i].salary > props.salaryRange.second
-  //     ) {
-  //       // console.log("exist here", playersData[i].salary, playersData[i].fpts);
-  //       arr.push({ ...playersData[i], isChecked: false, isLocked: false });
-  //     }
-  //   }
-
-  //   // for (let i = 0; i < playersData.length; i++) {
-  //   //   if (
-  //   //     playersData[i].fpts < props.fpRange.first ||
-  //   //     playersData[i].fpts > props.fpRange.second
-  //   //   ) {
-  //   //     if (!arr.includes(playersData[i])) {
-  //   //       arr.push({ ...playersData[i], isChecked: true, isLocked: false });
-  //   //     }
-  //   //   }
-  //   // }
-
-  //   // console.log(arr);
-
-  //   props.addExcludedPlayer(arr);
-
-  //   // console.log("*********************************************");
-  //   let arr1 = [];
-  //   for(let i = 0; i < playersData.length; i++){
-  //     let flag = false;
-  //     for(let j = 0; j < props.excludedPlayer.length; j++){
-  //       if(props.excludedPlayer[j].id === playersData[i].id){
-  //         // console.log("excludedPlayer: ", props.excludedPlayer[i]);
-  //         arr1.push(props.excludedPlayer[j]);
-  //         flag = true;
-  //         break;
-  //       }
-  //     }
-
-  //     if(flag === false){
-  //       // console.log("playersData: ", playersData[i]);
-  //       arr1.push({...playersData[i], isChecked : true, isLocked : false});
-  //     }
-  //   }
-
-  //   props.setAllPlayer(arr1);
-
-  //   // eslint-disable-next-line
-  // },[props.salaryRange.first, props.salaryRange.second]);
-
   function onFlexVal1Change(e) {
     setFlexVal1(e.target.value);
     props.handleFlexPositions({
@@ -490,6 +438,7 @@ function Optimize(props) {
     // console.log(projectOwnCap);
     // console.log(lineup);
     // console.log(passCatcher);
+    props.allowBottom(true);
   }
   return (
     <div className="optimizer">

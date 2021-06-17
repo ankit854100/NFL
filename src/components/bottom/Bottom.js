@@ -1,7 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { lineup, totalLineUps } from "../../data";
 import LineupInfo from "./LineupInfo";
+import LineUpsPlayer from "./LineUpsPlayer";
+import {connect} from "react-redux";
+import setAllClick, {sortByTotalPowns, sortByFinalFpts, sortBySalary, sortByProjection, sortByFantasyPoints, setIsChecked, setNoneClicked, setUnChecked, setIsDelete, setPlayerChecked, setPlayerUnChecked, setOptimize} from "../../redux/Bottom/ActionContainer"
+
+const mapStateToProps = (state) => {
+  return{
+    lineupList : state.bottom.lineupList,
+    lineupPlayers: state.bottom.lineupPlayers
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setAllClick: () => dispatch(setAllClick()),
+    setNoneClick: () => dispatch(setNoneClicked()),
+    setIsChecked: (val) => dispatch(setIsChecked(val)),
+    setUnChecked: (val) => dispatch(setUnChecked(val)),
+    setIsDelete: (val) => dispatch(setIsDelete(val)),
+    setPlayerChecked: (value) => dispatch(setPlayerChecked(value)),
+    setPlayerUnChecked: (value) => dispatch(setPlayerUnChecked(value)),
+    setOptimize: () => dispatch(setOptimize()),
+    sortBySalary: () => dispatch(sortBySalary()),
+    sortByFantasyPoints: () => dispatch(sortByFantasyPoints()),
+    sortByFinalFpts: () => dispatch(sortByFinalFpts()),
+    sortByTotalPowns: () => dispatch(sortByTotalPowns()),
+    sortByProjection: () => dispatch(sortByProjection())
+  };
+};
+
 
 const sortLineups = [
   "Fantasy points",
@@ -11,10 +40,49 @@ const sortLineups = [
   "Total pOwns"
 ];
 
-export default function () {
+function Bottom(props) {
   const [control, setControl] = useState("ALL");
   const [playerStackVal, setPlayerStackVal] = useState("PLAYER");
   const [position, setPosition] = useState("ALL");
+  const [dropdownVal, setDropdownval] = useState("Fantasy points");
+
+  // useEffect(() => {
+  //   console.log("rendered");
+  // })
+
+  function handleDropDown(e){
+    if(e.target.value === "Salary"){
+      setDropdownval(e.target.value)
+      props.sortBySalary();
+    }
+
+    else if(e.target.value === "Fantasy points"){
+      setDropdownval(e.target.value)
+      props.sortByFantasyPoints();
+    }
+
+    else if(e.target.value === "Projection"){
+      setDropdownval(e.target.value)
+      props.sortByProjection();
+    }
+
+    else if(e.target.value === "Final Fpts"){
+      setDropdownval(e.target.value)
+      props.sortByFinalFpts();
+    }
+
+    else if(e.target.value === "Total pOwns"){
+      setDropdownval(e.target.value)
+      props.sortByTotalPowns();
+    }
+  }
+
+  function handleSort(){
+    if(dropdownVal === "Salary"){
+      // console.log("clicked salary");
+      props.sortBySalary();
+    }
+  }
 
   function positionFilterALL() {
     setPosition("ALL");
@@ -48,14 +116,17 @@ export default function () {
     setPlayerStackVal("STACK");
   }
 
-  // function handleL1() {
-  //   setL1(!l1);
-  // }
   function handleAllClick() {
     setControl("ALL");
+    props.setAllClick();
   }
   function handleNoneClick() {
     setControl("NONE");
+    props.setNoneClick();
+  }
+
+  function handleOptimize(){
+    props.setOptimize();
   }
   return (
     <div>
@@ -89,6 +160,8 @@ export default function () {
           <div className="white-box-dropdown-container">
             <select
               className="slate-dropdown"
+              value={dropdownVal}
+              onChange={handleDropDown}
               style={{
                 minWidth: "7.25rem",
                 minHeight: "0",
@@ -100,7 +173,7 @@ export default function () {
                 return <option value={curr}>{curr}</option>;
               })}
             </select>
-            <Button className="white-box-btn" variant="primary">
+            <Button className="white-box-btn" variant="primary" onClick={handleSort}>
               <strong>SORT</strong>
             </Button>
           </div>
@@ -160,7 +233,7 @@ export default function () {
                     <strong>3</strong> LINEUPS
                   </span>
                 </div>
-                <Button varient="primary">
+                <Button varient="primary" onClick={handleOptimize}>
                   <strong>OPTIMIZE</strong>
                 </Button>
               </div>
@@ -232,83 +305,17 @@ export default function () {
                     </tr>
                   </thead>
                   <tbody>
-                    {lineup.map((data, index) => {
+                    {props.lineupPlayers.map((data, index) => {
                       return position === "ALL" ? (
-                        <tr className={index % 2 === 0 ? "odd" : "even"}>
-                          <td>
-                            <input type="checkbox" checked={true} />
-                          </td>
-                          <td style={{ textAlign: "left" }}>
-                            <span>
-                              <strong>{data.name}</strong>
-                            </span>
-                          </td>
-                          <td>{data.Pos}</td>
-                          <td>
-                            <img className="mood-icon" src={data.team} alt="" />
-                          </td>
-                          <td>
-                            <input
-                              className="percent table-text-input"
-                              type="text"
-                              value={data.Fpts}
-                            />
-                          </td>
-                          <td>{data.exp}</td>
-                          <td>{data.projOwn}</td>
-                          <td>
-                            <input
-                              className="percent table-text-input"
-                              type="text"
-                              value={data.min}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              className="percent table-text-input"
-                              type="text"
-                              value={data.max}
-                            />
-                          </td>
-                        </tr>
+                        <LineUpsPlayer  key={index} 
+                                        data={data}
+                                        checked= {props.setPlayerChecked}
+                                        unchecked= {props.setPlayerUnChecked}/>
                       ) : position === data.Pos ? (
-                        <tr className={index % 2 === 0 ? "odd" : "even"}>
-                          <td>
-                            <input type="checkbox" checked={true} />
-                          </td>
-                          <td style={{ textAlign: "left" }}>
-                            <span>
-                              <strong>{data.name}</strong>
-                            </span>
-                          </td>
-                          <td>{data.Pos}</td>
-                          <td>
-                            <img className="mood-icon" src={data.team} alt="" />
-                          </td>
-                          <td>
-                            <input
-                              className="percent table-text-input"
-                              type="text"
-                              value={data.Fpts}
-                            />
-                          </td>
-                          <td>{data.exp}</td>
-                          <td>{data.projOwn}</td>
-                          <td>
-                            <input
-                              className="percent table-text-input"
-                              type="text"
-                              value={data.min}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              className="percent table-text-input"
-                              type="text"
-                              value={data.max}
-                            />
-                          </td>
-                        </tr>
+                        <LineUpsPlayer  key={index} 
+                                        data={data}
+                                        checked= {props.setPlayerChecked}
+                                        unchecked= {props.setPlayerUnChecked}/>
                       ) : null;
                     })}
                   </tbody>
@@ -317,7 +324,16 @@ export default function () {
             </div>
           ) : null}
         </div>
-        <LineupInfo lineupValue={control === "ALL" ? true : false} />
+        <div className="bottom-section-second">
+          {props.lineupList.map((item, index) => {
+            return <LineupInfo  key={index} 
+                                data={item} 
+                                setIsChecked={props.setIsChecked} 
+                                setUnChecked={props.setUnChecked} 
+                                setIsDelete={props.setIsDelete}
+                    />
+          })}
+        </div>
       </div>
       <style jsx>{`
         .white-box {
@@ -525,75 +541,43 @@ export default function () {
   );
 }
 
-{
-  /* <div className="bottom-section-second">
-          {totalLineUps.map((total) => {
-            return (
-              <div>
-                <div className="bottom-section-second-top">
-                  <span>
-                    <input type="checkbox" checked={l1} onChange={handleL1} />
-                    <span style={{ color: "#0075FF" }}> L1</span>
-                  </span>
-                  <span>
-                    <strong>Projection:</strong> {total.Projection}
-                  </span>
-                  <span>
-                    <strong>Salary:</strong> {total.Salary}
-                  </span>
-                  <span>
-                    <strong>FPTs:</strong> {total.FPTs}
-                  </span>
-                  <span>
-                    <strong>Final:</strong> {total.total}
-                  </span>
-                  <span>
-                    <strong>Total pOwn:</strong> 118
-                  </span>
-                  <span>
-                    <i class="fa fa-trash" style={{ fontSize: "16px" }}></i>
-                  </span>
-                </div>
-                <div className="bottom-section-second-table">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Pos</th>
-                        <th style={{ width: "180px" }}>Name</th>
-                        <th>Team</th>
-                        <th>Salary</th>
-                        <th>Fpts</th>
-                        <th>Final</th>
-                        <th>pOwn%</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {lineup.map((data, index) => {
-                        return (
-                          <tr className={index % 2 === 0 ? "odd" : "even"}>
-                            <td>{data.Pos}</td>
-                            <td>
+export default connect(mapStateToProps, mapDispatchToProps)(Bottom);
+
+
+{/* <tr className={index % 2 === 0 ? "odd" : "even"}>
+                          <td>
+                            <input type="checkbox" checked={true} />
+                          </td>
+                          <td style={{ textAlign: "left" }}>
+                            <span>
                               <strong>{data.name}</strong>
-                            </td>
-                            <td>
-                              <img
-                                className="mood-icon"
-                                src={data.team}
-                                alt=""
-                              />
-                            </td>
-                            <td>50000</td>
-                            <td>{data.Fpts}</td>
-                            <td>37.3</td>
-                            <td>9.47%</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            );
-          })}
-        </div> */
-}
+                            </span>
+                          </td>
+                          <td>{data.Pos}</td>
+                          <td>
+                            <img className="mood-icon" src={data.team} alt="" />
+                          </td>
+                          <td>
+                            <input
+                              className="percent table-text-input"
+                              type="text"
+                              value={data.Fpts}
+                            />
+                          </td>
+                          <td>{data.exp}</td>
+                          <td>{data.projOwn}</td>
+                          <td>
+                            <input
+                              className="percent table-text-input"
+                              type="text"
+                              value={data.min}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="percent table-text-input"
+                              type="text"
+                              value={data.max}
+                            />
+                          </td>
+                        </tr> */}

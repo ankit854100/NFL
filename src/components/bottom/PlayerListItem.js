@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { changeFPTS } from "../../redux/PlayerTableItem/ActionContainer";
 
 const chainUrl = [
   "https://image.flaticon.com/icons/png/128/3100/3100349.png",
@@ -13,13 +12,27 @@ const lockUrl = [
 
 export default function PlayerListItem(props) {
   const [chain, setChain] = useState(chainUrl[0]);
-  const [lock, setLock] = useState(lockUrl[0]);
+  const [lock, setLock] = useState(props.data.isLocked);
   const [select, setSelect] = useState(props.data.isChecked);
-  const [fpts, setFpts] = useState(props.data.fpts);
+  const [fpts, setFpts] = useState(props.data.proj_pts_aggressive);
+  const [icon, setIcon] = useState({});
+  const [awayIcon, setAwayIcon] = useState({});
 
-  // useEffect(() => {
-  //   console.log("rendered from playerListItem");
-  // });
+  useEffect(() => {
+    const tmp = props.icons.filter((item) => item.team_code === props.data.team);
+    setIcon(tmp[0].logo_standard);
+
+    props.games.forEach((item) => {
+      if(item.home_team === props.data.team){
+        const tmp = props.icons.filter((data) => data.team_code === item.away_team);
+        setAwayIcon(tmp[0].logo_standard);
+      }
+      else if(item.away_team === props.data.team){
+        const tmp = props.icons.filter((data) => data.team_code === item.home_team);
+        setAwayIcon(tmp[0].logo_standard);
+      }
+    })
+  },[]);
 
   function handleFptsChange(e) {
     setFpts(e.target.value);
@@ -32,16 +45,18 @@ export default function PlayerListItem(props) {
   }
 
   function handleLockClick() {
-    if (lock === lockUrl[0]) {
-      setLock(lockUrl[1]);
+    if (lock === false) {
+      setLock(true);
       props.lockPlayer(props.data);
       setSelect(true);
       props.checked(props.data);
+      props.setCalculateCost();
     } else {
-      setLock(lockUrl[0]);
+      setLock(false);
       props.unLockPlayer(props.data);
       setSelect(false);
       props.unChecked(props.data);
+      props.setCalculateCost();
     }
   }
 
@@ -85,9 +100,9 @@ export default function PlayerListItem(props) {
             <div className="lock-name">
               <img
                 className={
-                  lock === lockUrl[0] ? "lock-btn" : "lock-btn lock-btn-active"
+                  lock === false ? "lock-btn" : "lock-btn lock-btn-active"
                 }
-                src={lock}
+                src={lock === false? lockUrl[0]: lockUrl[1]}
                 alt=""
                 onClick={handleLockClick}
               />
@@ -104,19 +119,19 @@ export default function PlayerListItem(props) {
         </td>
 
         <td>
-          <span>{props.data.pos}</span>
+          <span>{props.data.position}</span>
         </td>
 
         <td>
           <div className="team-icon-container">
-            <img className="mood-icon" src={props.data.team} alt="" />
+            <img className="mood-icon" src={icon} alt="" />
           </div>
         </td>
 
         <td>vs</td>
 
         <td>
-          <img className="mood-icon" src={props.data.opp} alt="" />
+          <img className="mood-icon" src={awayIcon} alt="" />
         </td>
 
         <td className={props.changeDvpColor(props.data.dvp)}>
@@ -126,20 +141,20 @@ export default function PlayerListItem(props) {
           <span>{props.data.salary}</span>
         </td>
 
-        <td className={props.changeDvpColor(props.data.dollarFpts)}>
-          <span>{props.data.dollarFpts}</span>
+        <td className={props.changeDvpColor(props.data.proj_pts_conservative)}>
+          <span>{props.data.proj_pts_conservative}</span>
         </td>
 
         <td>
-          <span>{props.data.projection}</span>
+          <span>{props.data.proj_pts_aggressive}</span>
         </td>
 
         <td>
-          <span>{props.data.finalFpts}</span>
+          <span>{props.data.proj_pts}</span>
         </td>
 
-        <td className={props.changeDvpColor(props.data.rating)}>
-          <span>{props.data.rating}</span>
+        <td className={props.changeDvpColor(0)}>
+          <span>{0}</span>
         </td>
         <td>
           <input
@@ -149,7 +164,7 @@ export default function PlayerListItem(props) {
             onChange={handleFptsChange}
           />
         </td>
-        <td>{props.data.projOwn}</td>
+        <td>{props.data.ownership}</td>
         <td>
           <input
             className="percent table-text-input"

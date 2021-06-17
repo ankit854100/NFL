@@ -1,31 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import PlayerListItem from "./PlayerListItem";
-import { playersData } from "../../data";
 import checked, {
   lockPlayer,
   unLockPlayer,
   unChecked,
   changeFPTS,
-  setAllPlayer
+  setAllPlayer,
+  setCalculateCost,
+  setClearAll
 } from "../../redux/PlayerTableItem/ActionContainer";
-
-const chainUrl = [
-  "https://image.flaticon.com/icons/png/128/3100/3100349.png",
-  "https://image.flaticon.com/icons/png/128/115/115771.png"
-];
-
-const lockUrl = [
-  "https://image.flaticon.com/icons/png/128/633/633669.png",
-  "https://image.flaticon.com/icons/png/128/1828/1828415.png"
-];
 
 const mapStateToProps = (state) => {
   return {
     all: state.table.all,
     myPlayer: state.table.myPlayer,
     excludedPlayer: state.table.excludedPlayer,
-    lockedPlayer: state.table.lockedPlayer
+    lockedPlayer: state.table.lockedPlayer,
+    lockedCost: state.table.lockedCost,
+    selectedSlate: state.gamebox.selectedSlate,
+    selectedList: state.gamebox.selectedList,
+    icons: state.gamebox.icons,
+    games: state.gamebox.games
   };
 };
 
@@ -36,7 +32,9 @@ const mapDispatchToProps = (dispatch) => {
     lockPlayer: (value) => dispatch(lockPlayer(value)),
     unLockPlayer: (value) => dispatch(unLockPlayer(value)),
     changeFPTS: (value) => dispatch(changeFPTS(value)),
-    setAllPlayer: (value) => dispatch(setAllPlayer(value))
+    setAllPlayer: (value) => dispatch(setAllPlayer(value)),
+    setCalculateCost: () => dispatch(setCalculateCost()),
+    setClearAll: () => dispatch(setClearAll())
   };
 };
 
@@ -48,23 +46,47 @@ function PlayerList(props) {
   const [lockedPlayer, setLockedPlayer] = useState(false);
   const [expMin, setExpMin] = useState("0");
   const [expMax, setExpMax] = useState("100");
-  // const [chain, setChain] = useState(chainUrl[0]);
-  // const [lock, setLock] = useState(lockUrl[0]);
   const [position, setPosition] = useState("ALL");
 
-  // useEffect(() => {
-  // console.log("rendered from playeList");
-  // });
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(null);
 
-  // function handleChainClick() {
-  //   if (chain === chainUrl[0]) setChain(chainUrl[1]);
-  //   else setChain(chainUrl[0]);
-  // }
+  const [items, setItems] = useState(0);
+  
+  useEffect(() => {
+    loadPlayersData();
+    
+  },[props.selectedList]);
 
-  // function handleLockClick() {
-  //   if (lock === lockUrl[0]) setLock(lockUrl[1]);
-  //   else setLock(lockUrl[0]);
-  // }
+  async function loadPlayersData(){
+    fetch("https://api.fantasynerds.com/v1/nfl/dfs?apikey=TEST&slateId=")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setIsLoaded(true);
+          props.setClearAll();
+          let ind = 0;
+          result.players.forEach((player, index) => {
+            if(props.selectedList.includes(player.team)){
+              ind++;
+            } 
+          });
+
+          setItems(ind);
+
+          result.players.forEach((player, index) => {
+            if(props.selectedList.includes(player.team)){
+              props.setAllPlayer({...player, isChecked: false, isLocked: false});
+            } 
+          });
+          
+        },
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+      )
+  }
 
   const handleExpMin = (e) => {
     setExpMin(e.target.value);
@@ -153,7 +175,7 @@ function PlayerList(props) {
           onClick={allPlayers}
         >
           ALL PLAYERS
-          <span class="list-length">{props.all.length}</span>
+          <span class="list-length">{items}</span>
         </span>
         <span
           className={
@@ -185,7 +207,7 @@ function PlayerList(props) {
         >
           LOCKED PLAYERS
           <span class="list-length">{props.lockedPlayer.length}</span>
-          <span class="list-length" style={{borderLeft: "2px solid #000", paddingLeft: "2px"}}>$0</span>
+          <span class="list-length" style={{borderLeft: "2px solid #000", paddingLeft: "2px"}}>$ {props.lockedCost}</span>
         </span>
       </div>
       <div>
@@ -327,8 +349,11 @@ function PlayerList(props) {
                       unLockPlayer={props.unLockPlayer}
                       changeFPTS={props.changeFPTS}
                       excluded={false}
+                      icons={props.icons}
+                      games={props.games}
+                      setCalculateCost={props.setCalculateCost}
                     />
-                  ) : position === data.pos ? (
+                  ) : position === data.position ? (
                     <PlayerListItem
                       data={data}
                       changeDvpColor={changeDvpColor}
@@ -342,12 +367,15 @@ function PlayerList(props) {
                       unLockPlayer={props.unLockPlayer}
                       changeFPTS={props.changeFPTS}
                       excluded={false}
+                      icons={props.icons}
+                      games={props.games}
+                      setCalculateCost={props.setCalculateCost}
                     />
                   ) : null;
                 })}
               </tbody>
             ) : null}
-            {myPlayer === true ? (
+            {myPlayer === true && props.all.length === items? (
               <tbody>
                 {props.myPlayer.map((data, index) => {
                   return position === "ALL" ? (
@@ -364,6 +392,9 @@ function PlayerList(props) {
                       unLockPlayer={props.unLockPlayer}
                       changeFPTS={props.changeFPTS}
                       excluded={false}
+                      icons={props.icons}
+                      games={props.games}
+                      setCalculateCost={props.setCalculateCost}
                     />
                   ) : position === data.pos ? (
                     <PlayerListItem
@@ -379,6 +410,9 @@ function PlayerList(props) {
                       unLockPlayer={props.unLockPlayer}
                       changeFPTS={props.changeFPTS}
                       excluded={false}
+                      icons={props.icons}
+                      games={props.games}
+                      setCalculateCost={props.setCalculateCost}
                     />
                   ) : null;
                 })}
@@ -401,6 +435,9 @@ function PlayerList(props) {
                       unLockPlayer={props.unLockPlayer}
                       changeFPTS={props.changeFPTS}
                       excluded={true}
+                      icons={props.icons}
+                      games={props.games}
+                      setCalculateCost={props.setCalculateCost}
                     />
                   ) : position === data.pos ? (
                     <PlayerListItem
@@ -416,6 +453,9 @@ function PlayerList(props) {
                       unLockPlayer={props.unLockPlayer}
                       changeFPTS={props.changeFPTS}
                       excluded={true}
+                      icons={props.icons}
+                      games={props.games}
+                      setCalculateCost={props.setCalculateCost}
                     />
                   ) : null;
                 })}
@@ -438,6 +478,9 @@ function PlayerList(props) {
                       unLockPlayer={props.unLockPlayer}
                       changeFPTS={props.changeFPTS}
                       excluded={false}
+                      icons={props.icons}
+                      games={props.games}
+                      setCalculateCost={props.setCalculateCost}
                     />
                   ) : position === data.pos ? (
                     <PlayerListItem
@@ -453,6 +496,9 @@ function PlayerList(props) {
                       unLockPlayer={props.unLockPlayer}
                       changeFPTS={props.changeFPTS}
                       excluded={false}
+                      icons={props.icons}
+                      games={props.games}
+                      setCalculateCost={props.setCalculateCost}
                     />
                   ) : null;
                 })}
@@ -464,7 +510,7 @@ function PlayerList(props) {
         <div className="info">
           <div className="info-list">
             <span style={{ borderRight: "2px solid #707070" }}>
-              <strong>{playersData.length}</strong> PLAYERS
+              <strong>{props.all.length}</strong> PLAYERS
             </span>
             <span>
               LAST UPDATED <strong>18/01/2021 4:51 AM</strong>
