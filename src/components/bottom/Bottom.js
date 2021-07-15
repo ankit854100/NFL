@@ -45,42 +45,63 @@ function Bottom(props) {
   const [playerStackVal, setPlayerStackVal] = useState("PLAYER");
   const [position, setPosition] = useState("ALL");
   const [dropdownVal, setDropdownval] = useState("Fantasy points");
+  const [sortingVariable, setSortingVariable] = useState("None");
 
   // useEffect(() => {
-  //   console.log("rendered");
+  //   console.log("rendered from bottom");
   // })
 
   function handleDropDown(e){
     if(e.target.value === "Salary"){
       setDropdownval(e.target.value)
-      props.sortBySalary();
+      // props.sortBySalary();
     }
 
     else if(e.target.value === "Fantasy points"){
       setDropdownval(e.target.value)
-      props.sortByFantasyPoints();
+      // props.sortByFantasyPoints();
     }
 
     else if(e.target.value === "Projection"){
       setDropdownval(e.target.value)
-      props.sortByProjection();
+      // props.sortByProjection();
     }
 
     else if(e.target.value === "Final Fpts"){
       setDropdownval(e.target.value)
-      props.sortByFinalFpts();
+      // props.sortByFinalFpts();
     }
 
     else if(e.target.value === "Total pOwns"){
       setDropdownval(e.target.value)
-      props.sortByTotalPowns();
+      // props.sortByTotalPowns();
     }
   }
 
   function handleSort(){
     if(dropdownVal === "Salary"){
-      // console.log("clicked salary");
       props.sortBySalary();
+      setSortingVariable("Salary");
+    }
+
+    else if(dropdownVal === "Fantasy points"){
+      props.sortByFantasyPoints();
+      setSortingVariable("Fantasy points");
+    }
+
+    else if(dropdownVal === "Projection"){
+      props.sortByProjection();
+      setSortingVariable("Projection");
+    }
+
+    else if(dropdownVal === "Final Fpts"){
+      props.sortByFinalFpts();
+      setSortingVariable("Final Fpts");
+    }
+
+    else if(dropdownVal === "Total pOwns"){
+      props.sortByTotalPowns();
+      setSortingVariable("Total pOwns");
     }
   }
 
@@ -308,11 +329,13 @@ function Bottom(props) {
                     {props.lineupPlayers.map((data, index) => {
                       return position === "ALL" ? (
                         <LineUpsPlayer  key={index} 
+                                        index={index}
                                         data={data}
                                         checked= {props.setPlayerChecked}
                                         unchecked= {props.setPlayerUnChecked}/>
                       ) : position === data.Pos ? (
                         <LineUpsPlayer  key={index} 
+                                        index={index}
                                         data={data}
                                         checked= {props.setPlayerChecked}
                                         unchecked= {props.setPlayerUnChecked}/>
@@ -326,11 +349,12 @@ function Bottom(props) {
         </div>
         <div className="bottom-section-second">
           {props.lineupList.map((item, index) => {
-            return <LineupInfo  key={index} 
-                                data={item} 
-                                setIsChecked={props.setIsChecked} 
-                                setUnChecked={props.setUnChecked} 
-                                setIsDelete={props.setIsDelete}
+            return <LineupInfo  
+                        key={index}
+                        data={item} 
+                        setIsChecked={props.setIsChecked} 
+                        setUnChecked={props.setUnChecked} 
+                        setIsDelete={props.setIsDelete}
                     />
           })}
         </div>

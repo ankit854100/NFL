@@ -97,7 +97,7 @@ const initialState = {
         {
             id: 2,
             isChecked: true,
-            projection: 150,
+            projection: 180,
             salary: 50000,
             fpts: 170,
             final: 200,
@@ -189,7 +189,7 @@ const initialState = {
         {
             id: 3,
             isChecked: true,
-            projection: 150,
+            projection: 200,
             salary: 20000,
             fpts: 120,
             final: 140,
@@ -515,6 +515,7 @@ function handlePlayerUnCheck(list, val){
 
 function handleOptimize(list){
     const newList = list.filter((item) => item.isChecked === true);
+    // console.log("remaining players: ", newList);
 
     return newList;
 }

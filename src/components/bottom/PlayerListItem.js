@@ -19,6 +19,9 @@ export default function PlayerListItem(props) {
   const [awayIcon, setAwayIcon] = useState({});
 
   useEffect(() => {
+    setSelect(props.data.isChecked);
+    setLock(props.data.isLocked);
+    
     const tmp = props.icons.filter((item) => item.team_code === props.data.team);
     setIcon(tmp[0].logo_standard);
 
@@ -32,7 +35,7 @@ export default function PlayerListItem(props) {
         setAwayIcon(tmp[0].logo_standard);
       }
     })
-  },[]);
+  });
 
   function handleFptsChange(e) {
     setFpts(e.target.value);

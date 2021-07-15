@@ -10,6 +10,11 @@ const gameTypesDraftKings = ["CLASSIC", "TIERS", "SHOWDOWN"];
 
 const gameTypesFanduel = ["CLASSIC", "SINGLEGAME"];
 
+const myHeader = new Headers({
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET"
+})
+
 const mapStateToProps = (state) =>{
   return {
     selectedList: state.gamebox.selectedList,
@@ -55,7 +60,7 @@ function Mode(props) {
 
   useEffect(() => {
     // "https://api.fantasynerds.com/v1/nfl/dfs-slates?apikey=TEST"
-    fetch("/v1/nfl/dfs-slates?apikey=TEST")
+    fetch("https://api.fantasynerds.com/v1/nfl/dfs-slates?apikey=TEST")
       .then(res => res.json())
       .then(
         (result) => {
@@ -69,7 +74,7 @@ function Mode(props) {
         }
       )
 
-      fetch("/v1/nfl/teams?apikey=TEST")
+      fetch("https://api.fantasynerds.com//v1/nfl/teams?apikey=TEST")
       .then(res => res.json())
       .then(
         (result) => {
@@ -136,7 +141,7 @@ function Mode(props) {
 
   function getGames(slate){
     let tmp = [];
-    fetch("/v1/nfl/schedule?apikey=TEST")
+    fetch("https://api.fantasynerds.com//v1/nfl/schedule?apikey=TEST")
       .then(res => res.json())
       .then(
         (result) => {
@@ -159,7 +164,7 @@ function Mode(props) {
   }
 
   async function loadPlayersData(){
-    fetch("/v1/nfl/dfs?apikey=TEST&slateId=")
+    fetch("https://api.fantasynerds.com//v1/nfl/dfs?apikey=TEST&slateId=")
       .then(res => res.json())
       .then(
         (result) => {

@@ -353,6 +353,7 @@ function PlayerList(props) {
                         return position === "ALL" ? (
                             <PlayerListItem
                             key={index}
+                            index={index}
                             data={data}
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
@@ -372,6 +373,7 @@ function PlayerList(props) {
                         ) : position === data.position ? (
                             <PlayerListItem
                             key={index}
+                            index={index}
                             data={data}
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
@@ -445,6 +447,7 @@ function PlayerList(props) {
                         return position === "ALL" ? (
                             <PlayerListItem
                             key={index}
+                            index={index}
                             data={data}
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
@@ -464,6 +467,7 @@ function PlayerList(props) {
                         ) : position === data.position ? (
                             <PlayerListItem
                             key={index}
+                            index={index}
                             data={data}
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
@@ -536,6 +540,7 @@ function PlayerList(props) {
                         return position === "ALL" ? (
                             <PlayerListItem
                             key={index}
+                            index={index}
                             data={data}
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
@@ -555,6 +560,7 @@ function PlayerList(props) {
                         ) : position === data.position ? (
                             <PlayerListItem
                             key={index}
+                            index={index}
                             data={data}
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
@@ -627,6 +633,7 @@ function PlayerList(props) {
                         return position === "ALL" ? (
                             <PlayerListItem
                             key={index}
+                            index={index}
                             data={data}
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
@@ -646,6 +653,7 @@ function PlayerList(props) {
                         ) : position === data.position ? (
                             <PlayerListItem
                             key={index}
+                            index={index}
                             data={data}
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}

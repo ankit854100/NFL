@@ -1,76 +1,51 @@
-import React, { useState } from 'react';
-import faker from 'faker'
-import InfiniteScroll from 'react-infinite-scroll-component';
+import React, { useEffect, useState } from 'react'
 
-function App() {
-  const data = new Array(50).fill().map((value, id) => (({
-    id: id,
-    title: "this is title",
-    body: "this is body"
-  })))
 
-  const [count, setCount] = useState({
-    prev: 0,
-    next: 30
-  })
-  const [hasMore, setHasMore] = useState(true);
-  const [current, setCurrent] = useState(data.slice(count.prev, count.next))
-  const getMoreData = () => {
-    console.log("getMoreData called!!!!!!!!");
-    if (current.length === data.length) {
-      console.log("data is finished!!!!!!");
-      setHasMore(false);
-      return;
-    }
-    setTimeout(() => {
-      setCurrent(current.concat(data.slice(count.prev + 30, count.next + 30)))
-    }, 2000)
-    setCount((prevState) => ({ prev: prevState.prev + 30, next: prevState.next + 30}))
+const myHeader = new Headers({
+  "Access-Control-Allow-Origin": "*",
+  mode: "no-cors"
+})
+
+function Testing() {
+
+  const [items, setItems] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    console.log("items: ", items); 
+  },[items]);
+
+  function fetchData(){
+    console.log("function is called");
+    fetch("https://fly.sportsdata.io/v3/nfl/scores/json/FreeAgents?key=092412122bbc43d9980140fd468e6351")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setIsLoaded(true);
+          result.forEach(element => {
+            // console.log(element);
+            setItems(prev => {
+              return {
+                ...prev,
+                element
+              }
+            });
+          });
+        },
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+      )
   }
 
   return (
-    <div className="topS">
-      <div id="infinite-top-wrapper">
-      <InfiniteScroll
-      dataLength={current.length}
-      next={getMoreData}
-      hasMore={hasMore}
-      loader={<h4>Loading...</h4>}
-      scrollableTarget="infinite-top-wrapper"
-      >
-        <table>
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>title</th>
-            <th>body</th>
-          </tr>
-        </thead>
-        <tbody>
-          {current && current.map(((item, index) => (
-            <tr key={index}>
-              <td>{item.id}</td>
-              <td>{item.title}</td>
-              <td>{item.body}</td>
-            </tr>
-          )))
-          }
-        </tbody>
-        
-      </table>
-      </InfiniteScroll>
-      </div>
-      <style jsx>{`
-          .topS{
-            position: relative;
-          }
-          #infinite-top-wrapper{
-            height: 200px !important;
-            overflow-y: scroll !important;
-          }
-      `}</style>
-      
+    <div>
+      {isLoaded ? <p>Everything is loaded</p> : <button onClick={fetchData}>fetch data</button>}
+      {error && <h3>{error}</h3>}
     </div>
-  );
+  )
 }
-export default App;
+
+export default Testing

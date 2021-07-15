@@ -5,8 +5,10 @@ export default function LineupInfo(props) {
   const [l1, setL1] = useState(props.data.isChecked);
 
   useEffect(() => {
+    // console.log("rendring from LineupInfo");
     setL1(props.data.isChecked);  
-  },[props.data.isChecked]);
+    // console.log("l1 value: ", l1);
+  });
 
   function handleL1() {
     if(l1 === true){
@@ -67,7 +69,7 @@ export default function LineupInfo(props) {
                 <tbody>
                   {props.data.players.map((data, index) => {
                     return (
-                      <tr className={index % 2 === 0 ? "odd" : "even"}>
+                      <tr className={index % 2 === 0 ? "even" : "odd"}>
                         <td>{data.pos}</td>
                         <td>
                           <strong>{data.name}</strong>

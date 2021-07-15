@@ -1,7 +1,11 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
 function LineUpsPlayer(props) {
     const [isChecked, setIsChecked] = useState(props.data.isChecked);
+    
+    useEffect(() => {
+      setIsChecked(props.data.isChecked);
+    })
 
 
     function handleCheck(){
@@ -16,7 +20,7 @@ function LineUpsPlayer(props) {
     }
     return (
         <React.Fragment>
-            <tr className={props.key % 2 === 0 ? "odd" : "even"}>
+            <tr className={props.index % 2 === 0 ? "even" : "odd"}>
                           <td>
                             <input type="checkbox" checked={isChecked} onChange={handleCheck} />
                           </td>

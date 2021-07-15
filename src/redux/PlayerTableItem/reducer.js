@@ -52,6 +52,7 @@ function stateUnCheck(all, my, value){
   let newMy = my.filter((item) => item !== value);
   let temp = all.filter((item) => item === value);
   temp[0].isChecked = false;
+
   return newMy; 
 }
 
