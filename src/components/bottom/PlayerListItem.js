@@ -17,6 +17,8 @@ export default function PlayerListItem(props) {
   const [fpts, setFpts] = useState(props.data.proj_pts_aggressive);
   const [icon, setIcon] = useState({});
   const [awayIcon, setAwayIcon] = useState({});
+  const [expMin, setExpMin] = useState(props.data.min_exp);
+  const [expMax, setExpMax] = useState(props.data.max_exp);
 
   useEffect(() => {
     setSelect(props.data.isChecked);
@@ -37,9 +39,20 @@ export default function PlayerListItem(props) {
     })
   });
 
+  function handleExpMin(e){
+    setExpMin(e.target.value);
+    props.handleExpMin({data: props.data, expMin: e.target.value});
+  }
+
+  function handleExpMax(e){
+    setExpMax(e.target.value);
+    props.handleExpMax({data: props.data, expMax: e.target.value});
+  }
+
   function handleFptsChange(e) {
     setFpts(e.target.value);
-    props.changeFPTS({ id: props.data.id, fpts: e.target.value });
+    // props.changeFPTS({ id: props.data.playerId, fpts: e.target.value });
+    props.changeFPTS({data: props.data, fpts: e.target.value});
   }
 
   function handleChainClick() {
@@ -172,16 +185,16 @@ export default function PlayerListItem(props) {
           <input
             className="percent table-text-input"
             type="text"
-            value={props.expMin}
-            onChange={props.handleExpMin}
+            value={expMin}
+            onChange={handleExpMin}
           />
         </td>
         <td>
           <input
             className="percent table-text-input"
             type="text"
-            value={props.expMax}
-            onChange={props.handleExpMax}
+            value={expMax}
+            onChange={handleExpMax}
           />
         </td>
       </tr>

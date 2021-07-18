@@ -9,7 +9,11 @@ import checked, {
   setAllPlayer,
   setCalculateCost,
   setClearAll,
-  setTotal
+  setTotal,
+  setExpMin,
+  setExpMax,
+  setSelectALL,
+  setClearALLCheck
 } from "../../redux/PlayerTableItem/ActionContainer";
 import {setClearSlatePlayer, setSlatePlayers} from "../../redux/GameBox/actionContainer";
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -41,7 +45,12 @@ const mapDispatchToProps = (dispatch) => {
     setCalculateCost: () => dispatch(setCalculateCost()),
     setClearAll: () => dispatch(setClearAll()),
     setTotal: (value) => dispatch(setTotal(value)),
-    setClearSlatePlayer: () => dispatch(setClearSlatePlayer())
+    setClearSlatePlayer: () => dispatch(setClearSlatePlayer()),
+    setExpMin: (value) => dispatch(setExpMin(value)),
+    setExpMax: (value) => dispatch(setExpMax(value)),
+    setSelectALL: () => dispatch(setSelectALL()),
+    setClearALLCheck: () => dispatch(setClearALLCheck()),
+    setClearMyCheck: () => dispatch(setClearMyCheck())
   };
 };
 
@@ -54,6 +63,8 @@ function PlayerList(props) {
   const [expMin, setExpMin] = useState("0");
   const [expMax, setExpMax] = useState("100");
   const [position, setPosition] = useState("ALL");
+  const [selectAllCheckbox, setSelectAllCheckbox] = useState(false);
+  const [selectMyCheck, setSelectMyCheck] = useState(true);
 
 //   infinite scroll start
   const [count, setCount] = useState({
@@ -167,6 +178,27 @@ function PlayerList(props) {
     else if (color > 20 && color <= 25) return "light-green";
     else if (color > 25 && color <= 30) return "green";
     else if (color > 30 && color <= 35) return "dark-green";
+  }
+
+  function handleSelectAllCheckbox(){
+    if(selectAllCheckbox === false){
+      setSelectAllCheckbox(true);
+      props.setSelectALL();
+      setSelectMyCheck(true);
+    }
+    else{
+      setSelectAllCheckbox(false);
+      props.setClearALLCheck();
+      setSelectMyCheck(false);
+    }
+  }
+
+  function handleSelectMyCheck(){
+    if(selectMyCheck === true){
+      setSelectMyCheck(false);
+      setSelectAllCheckbox(false);
+      props.setClearALLCheck();
+    }
   }
 
   return (
@@ -307,7 +339,7 @@ function PlayerList(props) {
                     <thead>
                         <tr>
                             <th>
-                            <input type="checkbox" />
+                            <input type="checkbox" checked={selectAllCheckbox} onChange={handleSelectAllCheckbox}/>
                             </th>
                             <th style={{ width: "80px" }}>
                             <span>
@@ -358,8 +390,8 @@ function PlayerList(props) {
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
                             expMax={expMax}
-                            handleExpMin={handleExpMin}
-                            handleExpMax={handleExpMax}
+                            handleExpMin={props.setExpMin}
+                            handleExpMax={props.setExpMax}
                             lockPlayer={props.lockPlayer}
                             checked={props.checked}
                             unChecked={props.unChecked}
@@ -378,8 +410,8 @@ function PlayerList(props) {
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
                             expMax={expMax}
-                            handleExpMin={handleExpMin}
-                            handleExpMax={handleExpMax}
+                            handleExpMin={props.setExpMin}
+                            handleExpMax={props.setExpMax}
                             lockPlayer={props.lockPlayer}
                             checked={props.checked}
                             unChecked={props.unChecked}
@@ -402,7 +434,7 @@ function PlayerList(props) {
                     <thead>
                         <tr>
                             <th>
-                            <input type="checkbox" />
+                            <input type="checkbox" checked={selectMyCheck} onChange={handleSelectMyCheck}/>
                             </th>
                             <th style={{ width: "80px" }}>
                             <span>
@@ -452,8 +484,8 @@ function PlayerList(props) {
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
                             expMax={expMax}
-                            handleExpMin={handleExpMin}
-                            handleExpMax={handleExpMax}
+                            handleExpMin={props.setExpMin}
+                            handleExpMax={props.setExpMax}
                             lockPlayer={props.lockPlayer}
                             checked={props.checked}
                             unChecked={props.unChecked}
@@ -472,8 +504,8 @@ function PlayerList(props) {
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
                             expMax={expMax}
-                            handleExpMin={handleExpMin}
-                            handleExpMax={handleExpMax}
+                            handleExpMin={props.setExpMin}
+                            handleExpMax={props.setExpMax}
                             lockPlayer={props.lockPlayer}
                             checked={props.checked}
                             unChecked={props.unChecked}
@@ -545,8 +577,8 @@ function PlayerList(props) {
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
                             expMax={expMax}
-                            handleExpMin={handleExpMin}
-                            handleExpMax={handleExpMax}
+                            handleExpMin={props.setExpMin}
+                            handleExpMax={props.setExpMax}
                             lockPlayer={props.lockPlayer}
                             checked={props.checked}
                             unChecked={props.unChecked}
@@ -565,8 +597,8 @@ function PlayerList(props) {
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
                             expMax={expMax}
-                            handleExpMin={handleExpMin}
-                            handleExpMax={handleExpMax}
+                            handleExpMin={props.setExpMin}
+                            handleExpMax={props.setExpMax}
                             lockPlayer={props.lockPlayer}
                             checked={props.checked}
                             unChecked={props.unChecked}
@@ -638,7 +670,7 @@ function PlayerList(props) {
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
                             expMax={expMax}
-                            handleExpMin={handleExpMin}
+                            handleExpMin={props.setExpMin}
                             handleExpMax={handleExpMax}
                             lockPlayer={props.lockPlayer}
                             checked={props.checked}
@@ -658,8 +690,8 @@ function PlayerList(props) {
                             changeDvpColor={changeDvpColor}
                             expMin={expMin}
                             expMax={expMax}
-                            handleExpMin={handleExpMin}
-                            handleExpMax={handleExpMax}
+                            handleExpMin={props.setExpMin}
+                            handleExpMax={props.setExpMax}
                             lockPlayer={props.lockPlayer}
                             checked={props.checked}
                             unChecked={props.unChecked}

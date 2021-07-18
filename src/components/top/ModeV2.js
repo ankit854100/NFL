@@ -171,7 +171,7 @@ function Mode(props) {
           setIsPlayerLoaded(true);
           props.setClearSlatePlayer();
           result.players.forEach((player, index) => {
-              props.setSlatePlayers({...player, isChecked: false, isLocked: false});
+              props.setSlatePlayers({...player, isChecked: false, isLocked: false, min_exp: 0, max_exp: 100});
           });
           
           props.allowPlayerList(true);

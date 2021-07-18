@@ -11,7 +11,11 @@ import {
   LOCKED_PLAYER,
   CALCULATE_COST,
   CLEAR_ALL,
-  TOTAL
+  TOTAL,
+  EXPMIN,
+  EXPMAX,
+  SELECTALL,
+  CLEARALLCHECK
 } from "./ActionTypes";
 
 function setAllPlayer(value) {
@@ -103,6 +107,32 @@ function setTotal(value){
   }
 }
 
+function setExpMin(value){
+  return {
+    type: EXPMIN,
+    payload: value
+  }
+}
+
+function setExpMax(value){
+  return {
+    type: EXPMAX,
+    payload: value
+  }
+}
+
+function setSelectALL(){
+  return{
+    type: SELECTALL
+  }
+}
+
+function setClearALLCheck(){
+  return{
+    type: CLEARALLCHECK
+  }
+}
+
 export default checked;
 export {
   setClearAll,
@@ -116,5 +146,9 @@ export {
   setLockedPlayer,
   setMyPlayer, 
   setCalculateCost,
-  setTotal
+  setTotal,
+  setExpMin,
+  setExpMax,
+  setSelectALL,
+  setClearALLCheck
 };
