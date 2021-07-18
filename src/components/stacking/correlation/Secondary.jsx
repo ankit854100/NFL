@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 
 const mapStateToProps = (state) => {
   return {
-    total: state.table.total
+    total: state.table.total,
+    games: state.gamebox.games
   };
 };
 
@@ -22,12 +23,18 @@ function Secondary(props) {
   const [teamGame, setTeamGame] = useState("team");
   const [QBPlayer, setQBPlayer] = useState("none");
   const [team, setTeam] = useState("");
+  const [opp, setOpp] = useState("");
+  const [numOfLineups, setNumOfLineups] = useState(1);
 
   const [RBOppWRTE, setRBOppWRTE] = useState(true);
   const [WROppWRTE, setWROppWRTE] = useState(true);
   const [RBWRsame, setRBWRsame] = useState(true);
   const [RBDEFsame, setRBDEFsame] = useState(true);
   const [WRTEsameWRTE, setWRTEsameWRTE] = useState(true);
+
+  function handleNumOfLineups(e){
+    setNumOfLineups(e.target.value);
+  }
 
   function handleRBOppWRTE(){
     setRBOppWRTE(!RBOppWRTE);
@@ -72,6 +79,13 @@ function Secondary(props) {
     for(let i = 0; i < props.total.length; i++){
       if(e.target.value === props.total[i].name){
         setTeam(props.total[i].team);
+
+        for(let j = 0; j < props.games.length; j++){
+          if(props.games[j].home_team === props.total[i].team){
+            // console.log(props.games[j].away_team);
+            setOpp(props.games[j].away_team);
+          }
+        }
         break;
       }
     }
@@ -174,7 +188,8 @@ function Secondary(props) {
             <strong>in min</strong>
             <input
               type="text"
-              value="1"
+              value={numOfLineups}
+              onChange={handleNumOfLineups}
               className="correlation-position-wrapper"
               style={{ backgroundColor: "#fff", width: "64px" }}
             />
@@ -285,29 +300,27 @@ function Secondary(props) {
           <div className="secondary_sameTeam">
             <strong>{team}</strong>
             <div className="secondaryPlayerPanel_container">
-              {props.total.map((data, key) => {
+              {props.total.map((data, index) => {
                   if(data.team === team && playersPosition.includes(data.position)){
-                    return <SecondaryPlayerPanel data={data}/>
+                    return <SecondaryPlayerPanel key={index} data={data}/>
                     {/* console.log(data); */}
                   }
                   else return null;
               })}
             </div>
           </div>
-          {/* {teamGame === "game" &&
+          {teamGame === "game" &&
             <div className="secondary_oppositeTeam">
-              <strong>Team_name</strong>
+              <strong>{opp}</strong>
               <div className="secondaryPlayerPanel_container">
-                <SecondaryPlayerPanel />
-                <SecondaryPlayerPanel />
-                <SecondaryPlayerPanel />
-                <SecondaryPlayerPanel />
-                <SecondaryPlayerPanel />
-                <SecondaryPlayerPanel />
-                <SecondaryPlayerPanel />
+                {props.total.map((data, index) => {
+                  if(data.team === opp && playersPosition.includes(data.position)){
+                    return <SecondaryPlayerPanel key={index} data={data} />
+                  }
+                })}
               </div>
             </div>
-          } */}
+          }
         </div>
         {/* </div>s */}
       </div>
