@@ -1,453 +1,418 @@
 import {IS_NONE, IS_ALL, IS_CHECKED, IS_UNCHECKED, IS_DELETE, PLAYER_CHECKED, PLAYER_UNCHECKED, OPTIMIZE, SALARY, FANTASY_POINTS, FINAL_FPTS, PROJECTION, TOTAL_POWNS} from "./ActionTypes";
 
 const initialState = {
-    lineupList: [
+    "is_optimised": 1,
+    "total_players": [
         {
-            id: 1,
-            isChecked: true,
-            projection: 150,
-            salary: 80000,
-            fpts: 270,
-            final: 300,
-            totalPown: 218,
-            players:[
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                }
-            ]
+            "name": "James Robinson",
+            "pos": "RB",
+            "team": "JAC",
+            "fpts": 7.0,
+            "ownership": 2.0,
+            "exp": 0,
+            "expMin": 0,
+            "expMax": 100,
+            "playerId": 1918,
+            "isChecked": true
         },
         {
-            id: 2,
-            isChecked: true,
-            projection: 180,
-            salary: 50000,
-            fpts: 170,
-            final: 200,
-            totalPown: 118,
-            players:[
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                }
-            ]
+            "name": "Las Vegas Raiders",
+            "pos": "DEF",
+            "team": "LV",
+            "fpts": 4.5,
+            "ownership": 0.0,
+            "exp": 0,
+            "expMin": 0,
+            "expMax": 100,
+            "playerId": 13,
+            "isChecked": true
         },
         {
-            id: 3,
-            isChecked: true,
-            projection: 200,
-            salary: 20000,
-            fpts: 120,
-            final: 140,
-            totalPown: 108,
-            players:[
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                },
-                {
-                    name: "Laviska Shenault Jr.",
-                    pos: "QB",
-                    team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-                    salary: 50000,
-                    fpts: "13.27",
-                    final: "9.87",
-                    projOwn: "6.66"
-                }
-            ]
+            "name": "Justin Jefferson",
+            "pos": "WR",
+            "team": "MIN",
+            "fpts": 4.6,
+            "ownership": 4.0,
+            "exp": 0,
+            "expMin": 10,
+            "expMax": 100,
+            "playerId": 1941,
+            "isChecked": true
+        },
+        {
+            "name": "Davante Adams",
+            "pos": "WR",
+            "team": "GB",
+            "fpts": 12.8,
+            "ownership": 12.0,
+            "exp": 0,
+            "expMin": 0,
+            "expMax": 100,
+            "playerId": 451,
+            "isChecked": true
+        },
+        {
+            "name": "Boston Scott",
+            "pos": "RB",
+            "team": "PHI",
+            "fpts": 9.0,
+            "ownership": 1.0,
+            "exp": 0,
+            "expMin": 0,
+            "expMax": 100,
+            "playerId": 1400,
+            "isChecked": true
+        },
+        {
+            "name": "Henry Ruggs III",
+            "pos": "WR",
+            "team": "LV",
+            "fpts": 7.0,
+            "ownership": 5.0,
+            "exp": 0,
+            "expMin": 0,
+            "expMax": 100,
+            "playerId": 1939,
+            "isChecked": true
+        },
+        {
+            "name": "Antonio Gibson",
+            "pos": "RB",
+            "team": "WAS",
+            "fpts": 7.6,
+            "ownership": 1.0,
+            "exp": 0,
+            "expMin": 0,
+            "expMax": 100,
+            "playerId": 1957,
+            "isChecked": true
+        },
+        {
+            "name": "Zach Ertz",
+            "pos": "TE",
+            "team": "PHI",
+            "fpts": 8.9,
+            "ownership": 3.0,
+            "exp": 0,
+            "expMin": 0,
+            "expMax": 100,
+            "playerId": 342,
+            "isChecked": true
+        },
+        {
+            "name": "Aaron Rodgers",
+            "pos": "QB",
+            "team": "GB",
+            "fpts": 15.5,
+            "ownership": 1.0,
+            "exp": 0,
+            "expMin": 0,
+            "expMax": 5,
+            "playerId": 52,
+            "isChecked": true
+        },
+        {
+            "name": "Hunter Renfrow",
+            "pos": "WR",
+            "team": "LV",
+            "fpts": 5.7,
+            "ownership": 2.0,
+            "exp": 0,
+            "expMin": 0,
+            "expMax": 100,
+            "playerId": 1579,
+            "isChecked": true
+        },
+        {
+            "name": "Chris Conley",
+            "pos": "WR",
+            "team": "JAC",
+            "fpts": 4.9,
+            "ownership": 1.0,
+            "exp": 0,
+            "expMin": 0,
+            "expMax": 100,
+            "playerId": 635,
+            "isChecked": true
         }
     ],
-    lineupPlayers: [
-        {   
-            id: 1,
-            name: "Laviska Shenault Jr.",
-            Pos: "QB",
-            team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-            Fpts: "13.27",
-            exp: "67%(2)",
-            projOwn: "6.66",
-            min: "0%",
-            max: "100%",
-            isChecked: true
-          },
-          {
-            id: 2,
-            name: "Laviska Shenault Jr.",
-            Pos: "WR",
-            team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-            Fpts: "13.27",
-            exp: "67%(2)",
-            projOwn: "6.66",
-            min: "0%",
-            max: "100%",
-            isChecked: true
-          },
-          {
-            id: 3,
-            name: "Laviska Shenault Jr.",
-            Pos: "WR",
-            team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-            Fpts: "13.27",
-            exp: "67%(2)",
-            projOwn: "6.66",
-            min: "0%",
-            max: "100%",
-            isChecked: true
-          },
-          {
-            id: 4,
-            name: "Laviska Shenault Jr.",
-            Pos: "WR",
-            team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-            Fpts: "13.27",
-            exp: "67%(2)",
-            projOwn: "6.66",
-            min: "0%",
-            max: "100%",
-            isChecked: true
-          },
-          {
-            id: 5,
-            name: "Laviska Shenault Jr.",
-            Pos: "WR",
-            team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-            Fpts: "13.27",
-            exp: "67%(2)",
-            projOwn: "6.66",
-            min: "0%",
-            max: "100%",
-            isChecked: true
-          },
-          {
-            id: 6,
-            name: "Laviska Shenault Jr.",
-            Pos: "WR",
-            team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-            Fpts: "13.27",
-            exp: "67%(2)",
-            projOwn: "6.66",
-            min: "0%",
-            max: "100%",
-            isChecked: true
-          },
-          {
-            id: 7,
-            name: "Laviska Shenault Jr.",
-            Pos: "WR",
-            team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-            Fpts: "13.27",
-            exp: "67%(2)",
-            projOwn: "6.66",
-            min: "0%",
-            max: "100%",
-            isChecked: true
-          },
-          {
-            id: 8,
-            name: "Laviska Shenault Jr.",
-            Pos: "WR",
-            team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-            Fpts: "13.27",
-            exp: "67%(2)",
-            projOwn: "6.66",
-            min: "0%",
-            max: "100%",
-            isChecked: true
-          },
-          {
-            id: 9,
-            name: "Laviska Shenault Jr.",
-            Pos: "WR",
-            team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-            Fpts: "13.27",
-            exp: "67%(2)",
-            projOwn: "6.66",
-            min: "0%",
-            max: "100%",
-            isChecked: true
-          },
-          {
-            id: 10,
-            name: "Laviska Shenault Jr.",
-            Pos: "WR",
-            team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-            Fpts: "13.27",
-            exp: "67%(2)",
-            projOwn: "6.66",
-            min: "0%",
-            max: "100%",
-            isChecked: true
-          },
-          {
-            id: 11,
-            name: "Laviska Shenault Jr.",
-            Pos: "WR",
-            team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-            Fpts: "13.27",
-            exp: "67%(2)",
-            projOwn: "6.66",
-            min: "0%",
-            max: "100%",
-            isChecked: true
-          },
-          {
-            id: 12,
-            name: "Laviska Shenault Jr.",
-            Pos: "WR",
-            team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-            Fpts: "13.27",
-            exp: "67%(2)",
-            projOwn: "6.66",
-            min: "0%",
-            max: "100%",
-            isChecked: true
-          },
-          {
-            id: 13,
-            name: "Laviska Shenault Jr.",
-            Pos: "WR",
-            team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-            Fpts: "13.27",
-            exp: "67%(2)",
-            projOwn: "6.66",
-            min: "0%",
-            max: "100%",
-            isChecked: true
-          },
-          {
-            id: 14,
-            name: "Laviska Shenault Jr.",
-            Pos: "WR",
-            team: "https://domination.dfsarmy.com/images/teams/nfl/jax.svg",
-            Fpts: "13.27",
-            exp: "67%(2)",
-            projOwn: "6.66",
-            min: "0%",
-            max: "100%",
-            isChecked: true
-          }
+    "lineups": [
+        {
+            "total_projection": 102.0,
+            "total_salary": 49800,
+            "total_fpts": 78.0,
+            "total_final_fpts": 145.4,
+            "total_ownership": 27.0,
+            "isChecked": true,
+            "players": [
+                {
+                    "name": "Boston Scott",
+                    "pos": "flex",
+                    "team": "PHI",
+                    "salary": 4900,
+                    "fpts": 9.0,
+                    "final_fpts": 15.2,
+                    "ownership": 1.0
+                },
+                {
+                    "name": "Aaron Rodgers",
+                    "pos": "QB",
+                    "team": "GB",
+                    "salary": 7600,
+                    "fpts": 15.5,
+                    "final_fpts": 20.0,
+                    "ownership": 1.0
+                },
+                {
+                    "name": "Antonio Gibson",
+                    "pos": "RB",
+                    "team": "WAS",
+                    "salary": 4600,
+                    "fpts": 7.6,
+                    "final_fpts": 13.1,
+                    "ownership": 1.0
+                },
+                {
+                    "name": "Davante Adams",
+                    "pos": "WR",
+                    "team": "GB",
+                    "salary": 8000,
+                    "fpts": 12.8,
+                    "final_fpts": 23.4,
+                    "ownership": 12.0
+                },
+                {
+                    "name": "Henry Ruggs III",
+                    "pos": "WR",
+                    "team": "LV",
+                    "salary": 5100,
+                    "fpts": 7.0,
+                    "final_fpts": 14.1,
+                    "ownership": 5.0
+                },
+                {
+                    "name": "Hunter Renfrow",
+                    "pos": "WR",
+                    "team": "LV",
+                    "salary": 5200,
+                    "fpts": 5.7,
+                    "final_fpts": 12.1,
+                    "ownership": 2.0
+                },
+                {
+                    "name": "James Robinson",
+                    "pos": "RB",
+                    "team": "JAC",
+                    "salary": 4500,
+                    "fpts": 7.0,
+                    "final_fpts": 17.3,
+                    "ownership": 2.0
+                },
+                {
+                    "name": "Las Vegas Raiders",
+                    "pos": "DEF",
+                    "team": "LV",
+                    "salary": 3200,
+                    "fpts": 4.5,
+                    "final_fpts": 11.0,
+                    "ownership": 0.0
+                },
+                {
+                    "name": "Zach Ertz",
+                    "pos": "TE",
+                    "team": "PHI",
+                    "salary": 6700,
+                    "fpts": 8.9,
+                    "final_fpts": 19.2,
+                    "ownership": 3.0
+                }
+            ],
+            "id": 1
+        },
+        {
+            "total_projection": 101.2,
+            "total_salary": 49700,
+            "total_fpts": 77.2,
+            "total_final_fpts": 146.1,
+            "total_ownership": 26.0,
+            "isChecked": true,
+            "players": [
+                {
+                    "name": "Antonio Gibson",
+                    "pos": "flex",
+                    "team": "WAS",
+                    "salary": 4600,
+                    "fpts": 7.6,
+                    "final_fpts": 13.1,
+                    "ownership": 1.0
+                },
+                {
+                    "name": "Aaron Rodgers",
+                    "pos": "QB",
+                    "team": "GB",
+                    "salary": 7600,
+                    "fpts": 15.5,
+                    "final_fpts": 20.0,
+                    "ownership": 1.0
+                },
+                {
+                    "name": "Boston Scott",
+                    "pos": "RB",
+                    "team": "PHI",
+                    "salary": 4900,
+                    "fpts": 9.0,
+                    "final_fpts": 15.2,
+                    "ownership": 1.0
+                },
+                {
+                    "name": "Chris Conley",
+                    "pos": "WR",
+                    "team": "JAC",
+                    "salary": 5100,
+                    "fpts": 4.9,
+                    "final_fpts": 12.8,
+                    "ownership": 1.0
+                },
+                {
+                    "name": "Davante Adams",
+                    "pos": "WR",
+                    "team": "GB",
+                    "salary": 8000,
+                    "fpts": 12.8,
+                    "final_fpts": 23.4,
+                    "ownership": 12.0
+                },
+                {
+                    "name": "Henry Ruggs III",
+                    "pos": "WR",
+                    "team": "LV",
+                    "salary": 5100,
+                    "fpts": 7.0,
+                    "final_fpts": 14.1,
+                    "ownership": 5.0
+                },
+                {
+                    "name": "James Robinson",
+                    "pos": "RB",
+                    "team": "JAC",
+                    "salary": 4500,
+                    "fpts": 7.0,
+                    "final_fpts": 17.3,
+                    "ownership": 2.0
+                },
+                {
+                    "name": "Las Vegas Raiders",
+                    "pos": "DEF",
+                    "team": "LV",
+                    "salary": 3200,
+                    "fpts": 4.5,
+                    "final_fpts": 11.0,
+                    "ownership": 0.0
+                },
+                {
+                    "name": "Zach Ertz",
+                    "pos": "TE",
+                    "team": "PHI",
+                    "salary": 6700,
+                    "fpts": 8.9,
+                    "final_fpts": 19.2,
+                    "ownership": 3.0
+                }
+            ],
+            "id": 2
+        },
+        {
+            "total_projection": 100.7,
+            "total_salary": 49600,
+            "total_fpts": 76.9,
+            "total_final_fpts": 145.2,
+            "total_ownership": 29.0,
+            "isChecked": true,
+            "players": [
+                {
+                    "name": "James Robinson",
+                    "pos": "flex",
+                    "team": "JAC",
+                    "salary": 4500,
+                    "fpts": 7.0,
+                    "final_fpts": 17.3,
+                    "ownership": 2.0
+                },
+                {
+                    "name": "Aaron Rodgers",
+                    "pos": "QB",
+                    "team": "GB",
+                    "salary": 7600,
+                    "fpts": 15.5,
+                    "final_fpts": 20.0,
+                    "ownership": 1.0
+                },
+                {
+                    "name": "Antonio Gibson",
+                    "pos": "RB",
+                    "team": "WAS",
+                    "salary": 4600,
+                    "fpts": 7.6,
+                    "final_fpts": 13.1,
+                    "ownership": 1.0
+                },
+                {
+                    "name": "Boston Scott",
+                    "pos": "RB",
+                    "team": "PHI",
+                    "salary": 4900,
+                    "fpts": 9.0,
+                    "final_fpts": 15.2,
+                    "ownership": 1.0
+                },
+                {
+                    "name": "Davante Adams",
+                    "pos": "WR",
+                    "team": "GB",
+                    "salary": 8000,
+                    "fpts": 12.8,
+                    "final_fpts": 23.4,
+                    "ownership": 12.0
+                },
+                {
+                    "name": "Henry Ruggs III",
+                    "pos": "WR",
+                    "team": "LV",
+                    "salary": 5100,
+                    "fpts": 7.0,
+                    "final_fpts": 14.1,
+                    "ownership": 5.0
+                },
+                {
+                    "name": "Justin Jefferson",
+                    "pos": "WR",
+                    "team": "MIN",
+                    "salary": 5000,
+                    "fpts": 4.6,
+                    "final_fpts": 11.9,
+                    "ownership": 4.0
+                },
+                {
+                    "name": "Las Vegas Raiders",
+                    "pos": "DEF",
+                    "team": "LV",
+                    "salary": 3200,
+                    "fpts": 4.5,
+                    "final_fpts": 11.0,
+                    "ownership": 0.0
+                },
+                {
+                    "name": "Zach Ertz",
+                    "pos": "TE",
+                    "team": "PHI",
+                    "salary": 6700,
+                    "fpts": 8.9,
+                    "final_fpts": 19.2,
+                    "ownership": 3.0
+                }
+            ],
+            "id": 3
+        }
     ]
 }
 
@@ -495,7 +460,7 @@ function handleDelete(list, val){
 
 function handlePlayerChecked(list, val){
     list.forEach((item) => {
-        if(item.id === val){
+        if(item.playerId === val){
             item.isChecked = true;
         }
     });
@@ -505,7 +470,7 @@ function handlePlayerChecked(list, val){
 
 function handlePlayerUnCheck(list, val){
     list.forEach((item) => {
-        if(item.id === val){
+        if(item.playerId === val){
             item.isChecked = false;
         }
     });
@@ -564,67 +529,67 @@ function reducer(state = initialState, action){
     switch(action.type){
         case IS_ALL: return{
             ...state,
-            lineupList: handleAll(state.lineupList)
+            lineupList: handleAll(state.lineups)
         }
 
         case IS_NONE: return{
             ...state,
-            lineupList: handleNone(state.lineupList)
+            lineupList: handleNone(state.lineups)
         }
 
         case IS_CHECKED: return {
             ...state,
-            lineupList: handleChecked(state.lineupList, action.payload)
+            lineupList: handleChecked(state.lineups, action.payload)
         }
 
         case IS_UNCHECKED: return {
             ...state,
-            lineupList: handleUnchecked(state.lineupList, action.payload)
+            lineupList: handleUnchecked(state.lineups, action.payload)
         }
 
         case IS_DELETE: return{
             ...state,
-            lineupList: handleDelete(state.lineupList, action.payload)
+            lineupList: handleDelete(state.lineups, action.payload)
         }
 
         case PLAYER_CHECKED: return{
             ...state,
-            lineupPlayers: handlePlayerChecked(state.lineupPlayers, action.payload)
+            lineupPlayers: handlePlayerChecked(state.total_players, action.payload)
         }
 
         case PLAYER_UNCHECKED: return{
             ...state,
-            lineupPlayers: handlePlayerUnCheck(state.lineupPlayers, action.payload)
+            lineupPlayers: handlePlayerUnCheck(state.total_players, action.payload)
         }
 
         case OPTIMIZE: return{
             ...state,
-            lineupPlayers: handleOptimize(state.lineupPlayers)
+            lineupPlayers: handleOptimize(state.total_players)
         }
 
         case SALARY: return {
             ...state,
-            lineupList: handleSalarySort(state.lineupList)
+            lineupList: handleSalarySort(state.lineups)
         }
 
         case FANTASY_POINTS: return {
             ...state,
-            lineupList: handleFantasyPointsSort(state.lineupList)
+            lineupList: handleFantasyPointsSort(state.lineups)
         }
 
         case FINAL_FPTS: return {
             ...state,
-            lineupList: handleFinalFPTS(state.lineupList)
+            lineupList: handleFinalFPTS(state.lineups)
         }
 
         case PROJECTION: return {
             ...state,
-            lineupList: handleProjectionChange(state.lineupList)
+            lineupList: handleProjectionChange(state.lineups)
         }
 
         case TOTAL_POWNS: return {
             ...state,
-            lineupList: handleTotalPowns(state.lineupList)
+            lineupList: handleTotalPowns(state.lineups)
         }
 
         default: return state;

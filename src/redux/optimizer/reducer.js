@@ -41,7 +41,7 @@ const initialState = {
   randomization: 0,
   playerExposure: false,
   mode: "Optimal mode",
-  projOrFpts: "Projection",
+  projOrFpts: "projection",
   uniquePLayer: 1,
   playerVsDefence: 1,
   browserOrServer: "Browser"

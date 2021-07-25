@@ -71,7 +71,7 @@ export default function PlayerListItem(props) {
       setLock(false);
       props.unLockPlayer(props.data);
       setSelect(false);
-      props.unChecked(props.data);
+      // props.unChecked(props.data);
       props.setCalculateCost();
     }
   }
@@ -114,14 +114,25 @@ export default function PlayerListItem(props) {
         <td>
           <div className="name-container">
             <div className="lock-name">
-              <img
-                className={
-                  lock === false ? "lock-btn" : "lock-btn lock-btn-active"
-                }
-                src={lock === false? lockUrl[0]: lockUrl[1]}
-                alt=""
-                onClick={handleLockClick}
-              />
+              {props.excluded === false ? 
+                <img
+                  className={
+                    lock === false ? "lock-btn" : "lock-btn lock-btn-active"
+                  }
+                  src={lock === false? lockUrl[0]: lockUrl[1]}
+                  alt=""
+                  onClick={handleLockClick}
+                />
+              :
+                <img
+                    className={
+                      lock === false ? "lock-btn" : "lock-btn lock-btn-active"
+                    }
+                    src={lock === false? lockUrl[0]: lockUrl[1]}
+                    alt=""
+                />
+              }
+              {}
               <div>
                 <span>{props.data.name}</span>
               </div>
@@ -162,11 +173,11 @@ export default function PlayerListItem(props) {
         </td>
 
         <td>
-          <span>{props.data.proj_pts_aggressive}</span>
+          <span>{props.data.proj_pts}</span>
         </td>
 
         <td>
-          <span>{props.data.proj_pts}</span>
+          <span>{props.data.proj_pts_aggressive}</span>
         </td>
 
         <td className={props.changeDvpColor(0)}>

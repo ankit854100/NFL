@@ -5,9 +5,7 @@ export default function LineupInfo(props) {
   const [l1, setL1] = useState(props.data.isChecked);
 
   useEffect(() => {
-    // console.log("rendring from LineupInfo");
     setL1(props.data.isChecked);  
-    // console.log("l1 value: ", l1);
   });
 
   function handleL1() {
@@ -33,19 +31,19 @@ export default function LineupInfo(props) {
                 <span style={{ color: "#0075FF" }}> L{props.data.id}</span>
               </span>
               <span>
-                <strong>Projection:</strong> {props.data.projection}
+                <strong>Projection:</strong> {props.data.total_projection}
               </span>
               <span>
-                <strong>Salary:</strong> {props.data.salary}
+                <strong>Salary:</strong> {props.data.total_salary}
               </span>
               <span>
-                <strong>FPTs:</strong> {props.data.fpts}
+                <strong>FPTs:</strong> {props.data.total_fpts}
               </span>
               <span>
-                <strong>Final:</strong> {props.data.final}
+                <strong>Final:</strong> {props.data.total_final_fpts}
               </span>
               <span>
-                <strong>Total pOwn:</strong> {props.data.totalPown}
+                <strong>Total pOwn:</strong> {props.data.total_ownership}
               </span>
               <span onClick={() => {
                 props.setIsDelete(props.data.id);
@@ -68,6 +66,7 @@ export default function LineupInfo(props) {
                 </thead>
                 <tbody>
                   {props.data.players.map((data, index) => {
+
                     return (
                       <tr className={index % 2 === 0 ? "even" : "odd"}>
                         <td>{data.pos}</td>
@@ -75,12 +74,14 @@ export default function LineupInfo(props) {
                           <strong>{data.name}</strong>
                         </td>
                         <td>
-                          <img className="mood-icon" src={data.team} alt="" />
+                          <img className="mood-icon" 
+                          src=""
+                          alt="" />
                         </td>
-                        <td>{props.data.salary}</td>
+                        <td>{data.salary}</td>
                         <td>{data.fpts}</td>
-                        <td>{data.final}</td>
-                        <td>{data.projOwn}</td>
+                        <td>{data.final_fpts}</td>
+                        <td>{data.ownership}</td>
                       </tr>
                     );
                   })}

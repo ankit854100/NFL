@@ -13,6 +13,7 @@ import Bottom from "./bottom/Bottom";
 
 import { Provider } from "react-redux";
 import store from "../redux/store";
+import PlayerListItemV3 from "./bottom/PlayersListV3";
 
 export default function App() {
 
@@ -37,7 +38,8 @@ export default function App() {
         {playerList && <Combination />}
         {playerList && <Optimize allowBottom={handleBottomLoad}/>}
         {/* <PlayersList /> */}
-        {playerList && <PlayerListV2 />}
+        {/* {playerList && <PlayerListV2 />} */}
+        {playerList && <PlayerListItemV3 />}
         {loadBottom && <Bottom />}
       </div>
     </Provider>

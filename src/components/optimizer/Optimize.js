@@ -20,19 +20,25 @@ import salaryCap, {
   projectionOrFpts,
   uniquePLayer,
   playerVsDefence,
-  browserOrServer
+  browserOrServer,
 } from "../../redux/optimizer/actionContainer";
 import { playersData } from "../../data";
 
+import axios from "axios";
+
 import {
   setExcludedPlayer,
-  setAllPlayer
+  setAllPlayer,
+  setFinalTotal,
+  setClearInfinteScroll
 } from "../../redux/PlayerTableItem/ActionContainer";
 
 const uniquePlayer = [1, 2, 3, 4, 5, 6];
 
 const mapStateToProps = (state) => {
   return {
+    total: state.table.total,
+    excludedPlayer: state.table.excludedPlayer,
     salaryRange: state.optimizer.salaryRange,
     fpRange: state.optimizer.fpRange,
     salaryCap: state.optimizer.salaryCap,
@@ -51,7 +57,14 @@ const mapStateToProps = (state) => {
     playerVsDefence: state.optimizer.playerVsDefence,
     browserOrServer: state.optimizer.browserOrServer,
     excludedPlayer: state.table.excludedPlayer,
-    all: state.table.all
+    all: state.table.all,
+    myPlayer: state.table.myPlayer,
+    lockedPlayer: state.table.lockedPlayer,
+    correlation: state.stack.correlation,
+    legacy: state.stack.legacy,
+    perTeam: state.stack.perTeam,
+    combination: state.stack.combination,
+    games: state.gamebox.games
   };
 };
 
@@ -74,8 +87,9 @@ const mapDispatchToProps = (dispatch) => {
     handleUniquePlayer: (value) => dispatch(uniquePLayer(value)),
     handlePlayerVsDefence: (value) => dispatch(playerVsDefence(value)),
     handleBrowserOrServer: (value) => dispatch(browserOrServer(value)),
-    addExcludedPlayer: (value) => dispatch(setExcludedPlayer(value)),
-    setAllPlayer: (value) => dispatch(setAllPlayer(value))
+    setExcludedPlayer: (value) => dispatch(setExcludedPlayer(value)),
+    setAllPlayer: (value) => dispatch(setAllPlayer(value)),
+    setFinalTotal: (value) => dispatch(setFinalTotal(value))
   };
 };
 
@@ -85,7 +99,7 @@ function Optimize(props) {
   const [flexVal2, setFlexVal2] = useState("100");
   const [flexVal3, setFlexVal3] = useState("100");
   const [dropDownMode, setDropownMode] = useState("Optimal mode");
-  const [dropDownProjection, setDropDownProjection] = useState("Projection");
+  const [dropDownProjection, setDropDownProjection] = useState("projection");
   const [dropDownUniquePlayer, setDropDownUniquePlayer] = useState(1);
   const [dropDownDefence, setDropDownDefence] = useState(1);
   const [dropDownBrowser, setDropDownBrowser] = useState("Browser");
@@ -107,6 +121,25 @@ function Optimize(props) {
   const [TE, setTE] = useState(true);
   const [DST, setDST] = useState(true);
   const [projOwn, setProjOwn] = useState(100);
+
+  const [excludedList, setExcludedList] = useState([]);
+
+  // useEffect(() => {
+  //   let temp = [];
+  //   for(let i = 0; i < props.total.length; i++){
+  //     if(props.total[i].salary < props.salaryRange.first){
+  //     //  setExcludedList((prev) => {
+  //     //    return [...prev, props.total[i]];
+  //     //  }); 
+  //       console.log(props.total[i]);
+  //       temp.push(props.total[i]);
+  //     }
+  //   }
+  //   console.log("################################");
+  //   console.log("from optimizer: ", excludedList);
+  //   console.log("#################################");
+
+  // })
 
   function onFlexVal1Change(e) {
     setFlexVal1(e.target.value);
@@ -167,12 +200,18 @@ function Optimize(props) {
   function handleSalaryRange(array) {
     setSalaryRange(array);
     props.handleSalaryRange(array);
+
+    props.setExcludedPlayer({salary: props.salaryRange, fp: props.fpRange});
+    props.setFinalTotal({salary: props.salaryRange, fp: props.fpRange});
     // console.log(array);
   }
 
   function handleFPRange(array) {
     setFPRange(array);
     props.handleFPRange(array);
+
+    props.setExcludedPlayer({salary: props.salaryRange, fp: props.fpRange});
+    props.setFinalTotal({salary: props.salaryRange, fp: props.fpRange});
   }
 
   function handleSalaryCap(array) {
@@ -439,9 +478,61 @@ function Optimize(props) {
     // console.log(lineup);
     // console.log(passCatcher);
     props.allowBottom(true);
+
+    const teamVsAgainst = props.games.map((game) => {
+      return {"away_team": game.away_team, "home_team": game.home_team};
+    })
+    
+    const arr = {
+      "stacking": {
+                    "correlation": props.correlation.values.length > 0 ? 1: 0,
+                    "legacy": props.legacy.length > 0 ? 1: 0,
+                    "per_team": props.perTeam.length > 0 ? 1: 0,
+                    "player_combination": props.combination.length > 0 ? 1: 0
+                  },
+      "correlation": props.correlation,
+      "legacy": props.legacy,
+      "perTeam": props.perTeam,
+      "combination": props.combination,
+      "optimizer_panel": {
+                          "sal_range": [props.salaryRange.first, props.salaryRange.second],
+                          "fp_range": [props.fpRange.first, props.fpRange.second],
+                          "sal_cap": [props.salaryCap.first, props.salaryCap.second],
+                          "ownership_cap": [props.projectedOwnershipCap.first, props.projectedOwnershipCap.second],
+                          "lineups": parseInt(props.numOfLineups),
+                          "flag_disallow": props.passCatcher,
+                          "forcing_flex": props.forcePlayer,
+                          "optimisation": props.projOrFpts,
+                          "uniqueness": parseInt(props.uniquePLayer)
+                          },
+      "total_player": props.myPlayer,
+      "locked_player": props.lockedPlayer,
+      "excludedPlayer": [],
+      "opposite_team": teamVsAgainst
+    }
+
+    axios.post("http://127.0.0.1:8000/items/", arr,)
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+    // console.log(arr);
+
+    // var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(arr));
+    // var dlAnchorElem = document.getElementById('downloadAnchorElem');
+    // dlAnchorElem.setAttribute("href",     dataStr     );
+    // dlAnchorElem.setAttribute("download", "optimizer_input.json");
+    // dlAnchorElem.click();
+
+    // console.log(arr);
   }
+
   return (
     <div className="optimizer">
+    <a id="downloadAnchorElem" style={{display:"none"}}></a>
       <div className="optimizer-left">
         <div className="optimizer-top">
           <div className="first-col">
@@ -515,8 +606,8 @@ function Optimize(props) {
                   value={dropDownProjection}
                   onChange={handleDropDownProjection}
                 >
-                  <option value="Projection">Projection</option>
-                  <option value="Final FPts">Final FPts</option>
+                  <option value="projection">projection</option>
+                  <option value="final_fpts">final FPts</option>
                 </select>
               </div>
 

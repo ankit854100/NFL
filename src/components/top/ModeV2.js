@@ -171,6 +171,14 @@ function Mode(props) {
           setIsPlayerLoaded(true);
           props.setClearSlatePlayer();
           result.players.forEach((player, index) => {
+              player.salary = parseInt(player.salary);
+              player.playerId = parseInt(player.playerId);
+              if(player.ownership === ""){
+                player.ownership = 0;
+              }
+              else{
+                player.ownership = parseInt(player.ownership);
+              }
               props.setSlatePlayers({...player, isChecked: false, isLocked: false, min_exp: 0, max_exp: 100});
           });
           

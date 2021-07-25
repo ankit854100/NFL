@@ -2,11 +2,25 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import "./stacking.css";
 import ShowStacking from "./ShowStaking";
+import { connect } from "react-redux";
+import {setPerTeam} from "../../redux/stack/actionContainer"
 
 const numbers = ["1", "2", "3", "4"];
 const teams = ["others", "GB", "LAR", "BUF", "BAL"];
 
-export default function () {
+const mapStateToProps = (state) => {
+  return {
+    selectedList: state.gamebox.selectedList
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setPerTeam: (value) => dispatch(setPerTeam(value))
+  };
+};
+
+function PerTeam(props) {
   const [perTeam, setPreTeam] = useState(false);
   const [amount, setAmount] = useState("atmost");
   const [number, setNumber] = useState("1");
@@ -30,6 +44,9 @@ export default function () {
 
   function handleAddRule(){
     const newValue = "Use " + amount + " " + number +" players for " + team;
+    const arr = {"type1": amount, "num_of_players": parseInt(number), "team": team};
+    // console.log(arr);
+    props.setPerTeam(arr);
     setStackingArray([...stackingArray, newValue]);
     // console.log(stackingArray);
   }
@@ -74,7 +91,7 @@ export default function () {
                   >
                     <option value="atleast">At least</option>
                     <option value="exactly">Exactly</option>
-                    <option value="atmost">At most</option>
+                    <option value="atmost" selected>At most</option>
                   </select>
 
                   <select
@@ -94,7 +111,8 @@ export default function () {
                     value={team}
                     onChange={handleTeam}
                   >
-                    {teams.map((team) => {
+                    <option value="others" selected>others</option>
+                    {props.selectedList.map((team) => {
                       return <option value={team}>{team}</option>;
                     })}
                   </select>
@@ -122,3 +140,5 @@ export default function () {
     </React.Fragment>
   );
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(PerTeam);

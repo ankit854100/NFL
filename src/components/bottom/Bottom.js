@@ -8,8 +8,9 @@ import setAllClick, {sortByTotalPowns, sortByFinalFpts, sortBySalary, sortByProj
 
 const mapStateToProps = (state) => {
   return{
-    lineupList : state.bottom.lineupList,
-    lineupPlayers: state.bottom.lineupPlayers
+    lineups : state.bottom.lineups,
+    total_players: state.bottom.total_players,
+    icons: state.gamebox.icons
   };
 };
 
@@ -126,7 +127,7 @@ function Bottom(props) {
   }
 
   function positionFilterDST() {
-    setPosition("DST");
+    setPosition("DEF");
   }
 
   function handlePlayer() {
@@ -204,13 +205,13 @@ function Bottom(props) {
             <strong>
               <i class="fa fa-trash"> DELETE</i>
             </strong>
-            <span style={{ color: "#c69a9a" }}>3 selected lineups</span>
+            <span style={{ color: "#c69a9a" }}>{props.lineups.length} selected lineups</span>
           </Button>
           <Button className="lineup-download-button" variant="success" style={{ backgroundColor: "#6D951E" }}>
             <strong>
               <i class="fa fa-cloud-download"></i> DOWNLOAD
             </strong>
-            <span>with 3 selected lineups</span>
+            <span>with {props.lineups.length}  selected lineups</span>
           </Button>{" "}
         </div>
       </div>
@@ -243,7 +244,7 @@ function Bottom(props) {
               <div className="first-bottom-title">
                 <div>
                   <span style={{ marginRight: "0.5rem" }}>
-                    <strong>13</strong> PLAYERS USED
+                    <strong>{props.total_players.length}</strong> PLAYERS USED
                   </span>
                   <span
                     style={{
@@ -251,7 +252,7 @@ function Bottom(props) {
                       paddingLeft: "0.25rem"
                     }}
                   >
-                    <strong>3</strong> LINEUPS
+                    <strong>{props.lineups.length}</strong> LINEUPS
                   </span>
                 </div>
                 <Button varient="primary" onClick={handleOptimize}>
@@ -326,17 +327,19 @@ function Bottom(props) {
                     </tr>
                   </thead>
                   <tbody>
-                    {props.lineupPlayers.map((data, index) => {
+                    {props.total_players.map((data, index) => {
                       return position === "ALL" ? (
                         <LineUpsPlayer  key={index} 
                                         index={index}
                                         data={data}
+                                        icons = {props.icons}
                                         checked= {props.setPlayerChecked}
                                         unchecked= {props.setPlayerUnChecked}/>
-                      ) : position === data.Pos ? (
+                      ) : position === data.pos ? (
                         <LineUpsPlayer  key={index} 
                                         index={index}
                                         data={data}
+                                        icons = {props.icons}
                                         checked= {props.setPlayerChecked}
                                         unchecked= {props.setPlayerUnChecked}/>
                       ) : null;
@@ -348,10 +351,11 @@ function Bottom(props) {
           ) : null}
         </div>
         <div className="bottom-section-second">
-          {props.lineupList.map((item, index) => {
+          {props.lineups.map((item, index) => {
             return <LineupInfo  
                         key={index}
                         data={item} 
+                        icons={props.icons}
                         setIsChecked={props.setIsChecked} 
                         setUnChecked={props.setUnChecked} 
                         setIsDelete={props.setIsDelete}

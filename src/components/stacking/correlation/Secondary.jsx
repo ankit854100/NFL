@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import SecondaryPlayerPanel from "./SecondaryPlayerPanel";
 import { connect } from "react-redux";
+import {setCorrelationArray} from "../../../redux/stack/actionContainer";
+import Button from "react-bootstrap/Button";
 
 const mapStateToProps = (state) => {
   return {
@@ -11,6 +13,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    setCorrelationArray: (value) => dispatch(setCorrelationArray(value))
   };
 };
 
@@ -31,6 +34,11 @@ function Secondary(props) {
   const [RBWRsame, setRBWRsame] = useState(true);
   const [RBDEFsame, setRBDEFsame] = useState(true);
   const [WRTEsameWRTE, setWRTEsameWRTE] = useState(true);
+
+  const [noLess1, setNoLess1] = useState("1");
+  const [noMore1, setNoMore1] = useState("3");
+  const [noLess2, setNoLess2] = useState("1");
+  const [noMore2, setNoMore2] = useState("3");
 
   function handleNumOfLineups(e){
     setNumOfLineups(e.target.value);
@@ -91,10 +99,53 @@ function Secondary(props) {
     }
   }
 
+  function noLess1Handler(e){
+    setNoLess1(e.target.value);
+  }
+
+  function noMore1handler(e){
+    setNoMore1(e.target.value);
+  }
+
+  function noLess2Handler(e){
+    setNoLess2(e.target.value);
+  }
+
+  function noMore2Handler(e){
+    setNoMore2(e.target.value);
+  }
 
   function crossDeleteHandler(){
     props.onDelete(props.id);
   }
+
+  function addValues(){
+    if(QBPlayer === "none"){
+      alert("Select a player");
+    }
+    else{
+      const team_flag = teamGame === "team" ? 1: 0;
+      const game_flag = teamGame === "game" ? 1: 0;
+      const first_option = RBOppWRTE === true ? 1: 0;
+      const second_option = WROppWRTE === true? 1: 0;
+      const third_option = RBWRsame === true? 1: 0;
+      const fourth_option = RBDEFsame === true? 1: 0;
+      const five_option = WRTEsameWRTE === true? 1: 0;
+      var output = {
+                      "game": game_flag,
+                      "Team": team_flag,
+                      "player": QBPlayer,
+                      "min_lineups": parseInt(numOfLineups),
+                      "flags": [first_option, second_option, third_option, fourth_option, five_option],
+                      "team_constraint": {"No_less_than": parseInt(noLess1),"No_more_than": parseInt(noMore1)},
+                      "opp_team_constraint": {"No_less_than": parseInt(noLess2), "No_more_than": parseInt(noMore2)}
+                    }
+
+      props.setCorrelationArray(output);
+    }
+    // console.log(output);
+  }
+
 
   return (
     <div className="secondary">
@@ -220,19 +271,23 @@ function Secondary(props) {
             <select
               className="dropdown"
               style={{ fontSize: "13px", width: "8rem", marginLeft: "10px" }}
+              value={noLess1}
+              onChange={noLess1Handler}
             >
-              <option>1 player</option>
-              <option>2 player</option>
-              <option>3 player</option>
+              <option value="1" selected>1 player</option>
+              <option value="2">2 player</option>
+              <option value="3">3 player</option>
             </select>
             <strong>No more than</strong>
             <select
               className="dropdown"
               style={{ fontSize: "13px", width: "8rem", marginLeft: "10px" }}
+              value={noMore1}
+              onChange={noMore1handler}
             >
-              <option>1 player</option>
-              <option>2 player</option>
-              <option selected>3 player</option>
+              <option value="1">1 player</option>
+              <option value="2">2 player</option>
+              <option value="3" selected>3 player</option>
             </select>
             <strong>of</strong>
             <strong
@@ -261,19 +316,23 @@ function Secondary(props) {
             <select
               className="dropdown"
               style={{ fontSize: "13px", width: "8rem", marginLeft: "10px" }}
+              value={noLess2}
+              onChange={noLess2Handler}
             >
-              <option>1 player</option>
-              <option>2 player</option>
-              <option>3 player</option>
+              <option value="1" selected>1 player</option>
+              <option value="2">2 player</option>
+              <option value="3">3 player</option>
             </select>
             <strong>No more than</strong>
             <select
               className="dropdown"
               style={{ fontSize: "13px", width: "8rem", marginLeft: "10px" }}
+              value={noMore2}
+              onChange={noMore2Handler}
             >
-              <option>1 player</option>
-              <option>2 player</option>
-              <option selected>3 player</option>
+              <option value="1">1 player</option>
+              <option value="2">2 player</option>
+              <option value="3" selected>3 player</option>
             </select>
             <strong>of</strong>
             <strong
@@ -322,6 +381,7 @@ function Secondary(props) {
             </div>
           }
         </div>
+        <Button varient="primary" onClick={addValues}>add secondary</Button>
         {/* </div>s */}
       </div>
       <style jsx>{`

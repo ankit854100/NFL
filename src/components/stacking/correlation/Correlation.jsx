@@ -1,9 +1,26 @@
 import React, { useState } from "react";
 // import "./stacking.css";
+import {connect} from "react-redux";
 import Secondary from "./Secondary";
 import Button from "react-bootstrap/Button";
+import {setCorrelation} from "../../../redux/stack/actionContainer";
 
-export default function () {
+const mapStateToProps = (state) => {
+  return {
+    total: state.table.total,
+    games: state.gamebox.games,
+    correlationArray: state.stack.correlationArray
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCorrelation: (value) => dispatch(setCorrelation(value))
+  };
+};
+
+
+function Correlation(props) {
   const [correlation, setCorrelation] = useState(false);
   const [rules, setRules] = useState([]);
 
@@ -15,7 +32,14 @@ export default function () {
     // rule = rule + 1;
     // ruleArray.push(rule);
     setRules((oldArray) => [...oldArray, 1]);
-    console.log(rules);
+    var arr = [];
+    // console.log(rules);
+    let output = {
+      "universal": 1, 
+      "values": props.correlationArray
+    }
+
+    props.setCorrelation(output);
   }
 
   function deleteFromStackingArray(index){
@@ -128,3 +152,5 @@ export default function () {
     </React.Fragment>
   );
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Correlation);

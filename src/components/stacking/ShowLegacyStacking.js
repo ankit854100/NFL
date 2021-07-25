@@ -3,16 +3,16 @@ import React, { useEffect } from "react";
 function ShowStacking(props){
 
     useEffect(() => {
-        // console.log(props);
+        console.log(props);
     })
 
     function handleCrossClick(){
-        props.onDelete({id: props.id, output: props.text.output});
+        props.onDelete(props.id);
     }
     return(
         <div>
             <div className="advance-tag">
-                <span>{props.text.text}</span>
+                <span>{props.text}</span>
                 <span className="cross-icon" onClick={handleCrossClick}><i class="fa fa-times-circle"></i></span>
             </div>
         <style jsx>{`

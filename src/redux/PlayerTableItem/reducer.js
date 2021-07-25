@@ -15,10 +15,15 @@ import {
   EXPMIN,
   EXPMAX,
   SELECTALL,
-  CLEARALLCHECK
+  CLEARALLCHECK,
+  FINAL_TOTAL,
+  CLEARALLPLAYER,
+  CLEARMYPLAYER,
+  FIRST_EXCLUSION
 } from "./ActionTypes";
 
 const initialState = {
+  finalTotal: [],
   total: [],
   all: [],
   myPlayer: [],
@@ -54,9 +59,9 @@ function stateChecked(my, all, value) {
   return my;
 }
 
-function stateUnCheck(all, my, value){
+function stateUnCheck(total, my, value){
   let newMy = my.filter((item) => item !== value);
-  let temp = all.filter((item) => item === value);
+  let temp = total.filter((item) => item === value);
   temp[0].isChecked = false;
 
   return newMy; 
@@ -109,7 +114,9 @@ function handleSetSelectALL(all, my){
   for(let i = 0; i < all.length; i++){
     let temp = all.filter((item) => item === all[i]);
     temp[0].isChecked = true;
-    my.push(temp[0]);
+    if(!my.includes(temp[0])){
+      my.push(temp[0]);
+    }
   }
   return my;
 }
@@ -123,10 +130,64 @@ function handleSetClearALLCheck(all, my){
   return [];
 }
 
+function handleExcludedPlayer(total, excluded, constraint){
+  // console.log(constraint);
+  excluded = [];
+  // let temp = [];
+  let newExcluded = [];
+  for(let i = 0; i < total.length; i++){
+    if((total[i].salary < constraint.salary.first || total[i].salary > constraint.salary.second ) && !excluded.includes(total[i])){
+      newExcluded.push(total[i]);
+    }
+    else if((total[i].proj_pts_conservative < constraint.fp.first || total[i].proj_pts_conservative > constraint.fp.second ) && !excluded.includes(total[i])){
+      newExcluded.push(total[i]);
+    }
+    // else{
+    //   // console.log("from else");
+    //   temp.push(total[i]);
+    // }
+  }
+  // console.log(temp, newExcluded);
+  // console.log("###############################");
+  return newExcluded;
+}
+
+function handleFinalTotal(total, constraint){
+  let temp = [];
+  let newExcluded = [];
+  for(let i = 0; i < total.length; i++){
+    if((total[i].salary < constraint.salary.first || total[i].salary > constraint.salary.second ) && !newExcluded.includes(total[i])){
+      newExcluded.push(total[i]);
+      if(total[i].isLocked === true){
+        total[i].isLocked = false;
+      }
+      else if(total[i].isChecked === true){
+        total[i].isChecked = false
+      }
+    }
+    else if((total[i].proj_pts_conservative < constraint.fp.first || total[i].proj_pts_conservative > constraint.fp.second ) && !newExcluded.includes(total[i])){
+      newExcluded.push(total[i]);
+      if(total[i].isLocked === true){
+        total[i].isLocked = false;
+      }
+      else if(total[i].isChecked === true){
+        total[i].isChecked = false
+      }
+    }
+    else{
+      // console.log("from else");
+      temp.push(total[i]);
+    }
+  }
+
+  return temp;
+}
+
 function reducer(state = initialState, action) {
   switch (action.type) {
 
     case CLEAR_ALL: return {
+      finalTotal: [],
       total: [],
       all: [],
       myPlayer: [],
@@ -137,6 +198,7 @@ function reducer(state = initialState, action) {
 
     case TOTAL: return {
       ...state,
+      finalTotal: [...state.total, action.payload],
       total: [...state.total, action.payload]
     }
 
@@ -144,14 +206,37 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         all: [...state.all, action.payload]
-        // all: stateAllPlayer(action.payload)
       };
+
+    case FIRST_EXCLUSION: return{
+      ...state,
+      excludedPlayer: [...state.excludedPlayer, action.payload]
+    }
 
     case EXCLUDED_PLAYER:
       return {
         ...state,
-        excludedPlayer: action.payload
+        excludedPlayer: handleExcludedPlayer(state.finalTotal, state.excludedPlayer, action.payload),
+        myPlayer: handleFinalTotal(state.myPlayer, action.payload),
+        lockedPlayer: handleFinalTotal(state.lockedPlayer, action.payload),
+        lockedCost: calculateLockedCost(state.lockedPlayer)
       };
+
+    case FINAL_TOTAL: return{
+      ...state,
+      total: handleFinalTotal(state.finalTotal, action.payload),
+      all: []
+    }
+
+    case CLEARALLPLAYER: return{
+      ...state,
+      all: []
+    }
+
+    case CLEARMYPLAYER: return{
+      ...state,
+      newMy: []
+    }
 
     case CHECKED:
       return {
@@ -163,7 +248,7 @@ function reducer(state = initialState, action) {
     case UNCHECKED:
       return {
         ...state,
-        myPlayer: stateUnCheck(state.all, state.myPlayer, action.payload)
+        myPlayer: stateUnCheck(state.total, state.myPlayer, action.payload)
       };
 
     case LOCK_PLAYER:
@@ -201,12 +286,12 @@ function reducer(state = initialState, action) {
 
     case SELECTALL: return{
       ...state,
-      myPlayer: handleSetSelectALL(state.all, state.myPlayer)
+      myPlayer: handleSetSelectALL(state.total, state.myPlayer)
     }
 
     case CLEARALLCHECK: return{
       ...state,
-      myPlayer: handleSetClearALLCheck(state.all, state.myPlayer)
+      myPlayer: handleSetClearALLCheck(state.total, state.myPlayer)
     }
     
     default:

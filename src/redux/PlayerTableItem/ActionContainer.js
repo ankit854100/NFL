@@ -15,7 +15,11 @@ import {
   EXPMIN,
   EXPMAX,
   SELECTALL,
-  CLEARALLCHECK
+  CLEARALLCHECK,
+  FINAL_TOTAL,
+  CLEARALLPLAYER,
+  CLEARMYPLAYER,
+  FIRST_EXCLUSION
 } from "./ActionTypes";
 
 function setAllPlayer(value) {
@@ -37,6 +41,19 @@ function setExcludedPlayer(value) {
     type: EXCLUDED_PLAYER,
     payload: value
   };
+}
+
+function setClearALLPlayer(){
+  return{
+    type: CLEARALLPLAYER
+  }
+}
+
+function setFinalTotal(value){
+  return{
+    type: FINAL_TOTAL,
+    payload: value
+  }
 }
 
 function setLockedPlayer(value) {
@@ -133,6 +150,19 @@ function setClearALLCheck(){
   }
 }
 
+function setClearMyPlayer(){
+  return {
+    type: CLEARMYPLAYER
+  }
+}
+
+function setFirstExclusion(value){
+  return{
+    type: FIRST_EXCLUSION,
+    payload: value
+  }
+}
+
 export default checked;
 export {
   setClearAll,
@@ -150,5 +180,9 @@ export {
   setExpMin,
   setExpMax,
   setSelectALL,
-  setClearALLCheck
+  setClearALLCheck,
+  setFinalTotal,
+  setClearALLPlayer,
+  setClearMyPlayer,
+  setFirstExclusion
 };

@@ -1,31 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { Multiselect } from "multiselect-react-dropdown";
 import ShowStacking from "./ShowStaking";
+import {connect} from "react-redux"
+import {setLegacy, setDeleteLegacy} from "../../redux/stack/actionContainer"
+import ShowLegacyStacking from "./ShowLegacyStacking";
 
-const players = [
-  "Patrick Mahomes",
-  "Tom Brady",
-  "Ezekiel Elliott",
-  "Saquon Barkley",
-  "Aaron Rodgers",
-  "Drew Brees"
-];
+// const players = [
+//   "Patrick Mahomes",
+//   "Tom Brady",
+//   "Ezekiel Elliott",
+//   "Saquon Barkley",
+//   "Aaron Rodgers",
+//   "Drew Brees"
+// ];
 
 const numbers = ["0", "1", "2", "3", "4"];
-const positions = ["QB", "RB", "WR", "TE", "D"];
+const positions = ["QB", "RB", "WR", "TE", "DEF"];
 
-export default function () {
+const mapStateToProps = (state) => {
+  return {
+    total: state.table.total,
+    legacy: state.stack.legacy
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setLegacy: (value) => dispatch(setLegacy(value)),
+    setDeleteLegacy: (value) => dispatch(setDeleteLegacy(value))
+  };
+};
+
+
+function Legacy(props) {
   const [legecy, setLegecy] = useState(false);
   const [position, setPosition] = useState("");
-  const [player, setPlayer] = useState(players[0]);
+  const [player, setPlayer] = useState("select player");
   const [radio, setRadio] = useState("position");
-  const [amount, setAmount] = useState("no less than");
+  const [amount, setAmount] = useState("no_less_than");
   const [number, setNumber] = useState("0");
   const [team, setTeam] = useState("same");
   const [positionMultiSelect, setPositionMultiSelect] = useState([]);
   const [playerMultiSelect, setPlayerMultiSelect] = useState([]);
   const [stackingArray, setStackingArray] = useState([]);
+  const [players, setPlayers] = useState([]);
+  const [multiSelectPlayers, setMultiSelectPlayers] = useState([]);
+  const [selected, setSelected] = useState([]);
 
   function handleTeam(e) {
     setTeam(e.target.value);
@@ -45,11 +66,29 @@ export default function () {
 
   function handlePosition(e) {
     setPosition(e.target.value);
+
+    setPlayer("select player");
+    setPlayerWithPosition(e.target.value);
+    setMultiSelectPlayers(
+      props.total.map((p) => p.name)
+    );
+    setPlayerMultiSelect([]);
+  }
+
+  function setPlayerWithPosition(pos){
+    setPlayers([]);
+    for(let i = 0; i < props.total.length; i++){
+      if(props.total[i].position === pos){
+        setPlayers((prev) => {
+          return [...prev, props.total[i].name]
+        });
+      }
+    }
   }
 
   function handlePlayer(e) {
-    setPlayer(e.target.player);
-    
+    setPlayer(e.target.value);
+    setPlayerMultiSelect([]);
   }
 
   function handleRadio(e) {
@@ -75,23 +114,43 @@ export default function () {
   }
 
   function handleAddRule(){
+    let output;
     if(radio === "position"){
       // setPlayerMultiSelect([]);
       const text = "Select " + position + " " + player + " with " + amount + " " + number + " " + positionMultiSelect.map((pos) => pos) + " from the " + team;
-      setStackingArray([...stackingArray, text]);
-      console.log(stackingArray);
+      const team_flag = team === "same" ? 1: 0;
+      const different_flag = team === "opposite" ? 1: 0;
+      output = {"position": position, "player": player, "position_flag": radio === "position" ? 1: 0, "player_flag": radio === "player" ? 1: 0, "type1": amount, "num_of_players": parseInt(number), "player_positions": positionMultiSelect.map((pos) => pos), "players_list": [], "same_team": team_flag, "different_team": different_flag};
+      setStackingArray([...stackingArray, {text: text, output: output}]);
+      // console.log(stackingArray);
+      props.setLegacy(output);
     }
     else{
       // setPositionMultiSelect([]);
-      const text = "Select " + position + " " + player + " with " + amount + " " + number + " " + playerMultiSelect.map((pos) => pos);
-      setStackingArray([...stackingArray, text]);
-      console.log(stackingArray);
+      // console.log(playerMultiSelect.length, number);
+      if(playerMultiSelect.length !== parseInt(number)){
+        alert("please select appropriate number of players or clear the selected value and choose again");
+      }
+      else if(playerMultiSelect.includes(player)){
+        alert("Choose different players or clear the selected value and choose again");
+      }
+      else{
+        const team_flag = team === "same" ? 1: 0;
+        const different_flag = team === "opposite" ? 1: 0;
+        output = {"position": position, "player": player,"position_flag": radio === "position" ? 1: 0, "player_flag": radio === "player" ? 1: 0, "type1": amount, "num_of_players": parseInt(number), "player_positions": [], "players_list": playerMultiSelect.map((pos) => pos), "same_team": team_flag, "different_team": different_flag};
+        const text = "Select " + position + " " + player + " with " + amount + " " + number + " " + playerMultiSelect.map((pos) => pos);
+        setStackingArray([...stackingArray, {text: text, output: output}]);
+        // console.log(stackingArray);
+        props.setLegacy(output);
+      }
     }
+    // console.log(output);
   }
 
   function deleteFromStackingArray(index){
     // stackingArray.splice(index, 1);
-    const spliced = stackingArray.slice(0, index).concat(stackingArray.slice(index + 1, stackingArray.length));
+    const spliced = stackingArray.slice(0, index.id).concat(stackingArray.slice(index.id + 1, stackingArray.length));
+    props.setDeleteLegacy(index.output);
     // console.log(index, spliced);
     setStackingArray(spliced);
   }
@@ -126,7 +185,7 @@ export default function () {
                     value={position}
                     onChange={handlePosition}
                   >
-                    <option value="">Position</option>
+                    <option value="" disabled>Position</option>
                     {positions.map((pos) => {
                       return <option value={pos}>{pos}</option>;
                     })}
@@ -137,6 +196,7 @@ export default function () {
                     value={player}
                     onChange={handlePlayer}
                   >
+                    <option value="select player" disabled>select player</option>
                     {players.map((player) => {
                       return <option value={player}>{player}</option>;
                     })}
@@ -170,9 +230,9 @@ export default function () {
                     value={amount}
                     onChange={handleAmount}
                   >
-                    <option value="no less than">No less than</option>
+                    <option value="no_less_than">No less than</option>
                     <option value="exactly">Exactly</option>
-                    <option value="more than">More than</option>
+                    <option value="more_than">More than</option>
                   </select>
 
                   <select
@@ -201,10 +261,11 @@ export default function () {
                   {radio === "player" && 
                     <div className="multiselect-wrapper">
                       <Multiselect
-                        options={players}
+                        options={multiSelectPlayers}
                         onSelect={onSelectPlayer}
                         onRemove={onRemovePlayer}
                         isObject={false}
+                        selectedValues={selected}
                       />
                     </div>
                   }
@@ -230,7 +291,7 @@ export default function () {
                 <div className="showstacking-container">
                   {stackingArray.map((val, index) => {
                     return <ShowStacking id={index} text={val} onDelete={deleteFromStackingArray}/>
-                  })}
+                  })} 
                 </div> 
               : null}
             </div>
@@ -256,3 +317,5 @@ export default function () {
     </React.Fragment>
   );
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Legacy);
