@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import "./stacking.css";
 import ShowStacking from "./ShowStaking";
 import { connect } from "react-redux";
-import {setPerTeam} from "../../redux/stack/actionContainer"
+import {setPerTeam, setDeletePerTeam} from "../../redux/stack/actionContainer"
 
 const numbers = ["1", "2", "3", "4"];
 const teams = ["others", "GB", "LAR", "BUF", "BAL"];
@@ -16,7 +16,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setPerTeam: (value) => dispatch(setPerTeam(value))
+    setPerTeam: (value) => dispatch(setPerTeam(value)),
+    setDeletePerTeam: (value) => dispatch(setDeletePerTeam(value))
   };
 };
 
@@ -47,13 +48,14 @@ function PerTeam(props) {
     const arr = {"type1": amount, "num_of_players": parseInt(number), "team": team};
     // console.log(arr);
     props.setPerTeam(arr);
-    setStackingArray([...stackingArray, newValue]);
+    setStackingArray([...stackingArray, {text: newValue, output: arr}]);
     // console.log(stackingArray);
   }
 
   function deleteFromStackingArray(index){
-    const spliced = stackingArray.slice(0, index).concat(stackingArray.slice(index + 1, stackingArray.length));
+    const spliced = stackingArray.slice(0, index.id).concat(stackingArray.slice(index.id + 1, stackingArray.length));
     setStackingArray(spliced);
+    props.setDeletePerTeam(index.output);
   }
 
   return (

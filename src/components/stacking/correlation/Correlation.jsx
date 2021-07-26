@@ -22,29 +22,42 @@ const mapDispatchToProps = (dispatch) => {
 
 function Correlation(props) {
   const [correlation, setCorrelation] = useState(false);
-  const [rules, setRules] = useState([]);
+  // const [rules, setRules] = useState([]);
+  const [second, setSecond] = useState(false);
+  const [primary, setPrimary] = useState(true);
 
   function handleCorrelation() {
     setCorrelation(!correlation);
   }
 
+  function handlePrimary(){
+    if(primary === true){
+      setPrimary(false);
+      props.setCorrelation(0);
+    }
+    else{
+      setPrimary(true);
+      props.setCorrelation(1);
+    }
+  }
+
   function handleRuleClick() {
     // rule = rule + 1;
     // ruleArray.push(rule);
-    setRules((oldArray) => [...oldArray, 1]);
-    var arr = [];
+    // setRules((oldArray) => [...oldArray, props.index]);
     // console.log(rules);
-    let output = {
-      "universal": 1, 
-      "values": props.correlationArray
-    }
 
-    props.setCorrelation(output);
+    setSecond(true);    
+
+    // props.setCorrelation(output);
   }
 
   function deleteFromStackingArray(index){
-    const spliced = rules.slice(0, index).concat(rules.slice(index + 1, rules.length));
-    setRules(spliced);
+    // console.log("from correlation stacking: ", index);
+    // const spliced = rules.slice(0, index).concat(rules.slice(index + 1, rules.length));
+    // setRules(spliced);
+    setSecond(false);
+
   }
 
   return (
@@ -74,7 +87,7 @@ function Correlation(props) {
                     </strong>
                   </div>
                   <div style={{ display: "block" }}>
-                    <input type="checkbox" checked="true" />{" "}
+                    <input type="checkbox" checked={primary} onChange={handlePrimary}/>{" "}
                     <strong>stack</strong>
                     <strong className="correlation-position-wrapper">QB</strong>
                     <strong>with atleast one of</strong>
@@ -94,14 +107,19 @@ function Correlation(props) {
                     <strong>Same Team. Include 1 Secondary Stack.</strong>
                   </div>
                 </div>
-                {rules.map((data, index) => {
+                {/* {rules.map((data, index) => {
+                  console.log(data);
                   return (
                     <div className="correlation-wrapper-bottom correlation-border-top">
-                      <Secondary id={index} onDelete={deleteFromStackingArray}/>
+                      <Secondary id={data} onDelete={deleteFromStackingArray}/>
                     </div>
                   );
-                })}
-
+                })} */}
+                {second &&
+                  <div className="correlation-wrapper-bottom correlation-border-top">
+                      <Secondary onDelete={deleteFromStackingArray}/>
+                  </div>
+                }
                 <div className="correlation-add-rule" onClick={handleRuleClick}>
                   <Button variant="primary" className="rule-button">
                     ADD RULE

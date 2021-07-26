@@ -1,5 +1,5 @@
 import { seedValue } from "faker";
-import {FANTASY_POINTS, FINAL_FPTS, IS_ALL, IS_CHECKED, IS_DELETE, IS_NONE, IS_UNCHECKED, OPTIMIZE, PLAYER_CHECKED, PLAYER_UNCHECKED, PROJECTION, SALARY, TOTAL_POWNS} from "./ActionTypes"
+import {CLEAR_EVERY_STATE, FANTASY_POINTS, FINAL_FPTS, IS_ALL, IS_CHECKED, IS_DELETE, IS_NONE, IS_UNCHECKED, OPTIMIZE, PLAYER_CHECKED, PLAYER_UNCHECKED, PROJECTION, SALARY, SET_IS_OPTIMIZED, SET_LINEUPS, SET_TOTAL_PLAYERS, TOTAL_POWNS} from "./ActionTypes"
 
 
 function setAllClick(){
@@ -85,6 +85,33 @@ function sortByTotalPowns(){
     }
 }
 
+function setLineups(value){
+    return{
+        type: SET_LINEUPS,
+        payload: value
+    }
+}
+
+function setTotalplayers(value){
+    return {
+        type: SET_TOTAL_PLAYERS,
+        payload: value
+    }
+}
+
+function setIsOptimized(value){
+    return {
+        type: SET_IS_OPTIMIZED,
+        payload: value
+    }
+}
+
+function setClearEveryStates(){
+    return{
+        type: CLEAR_EVERY_STATE
+    }
+}
+
 export default setAllClick;
 
 export {
@@ -99,5 +126,9 @@ export {
     sortByFinalFpts,
     sortBySalary,
     sortByProjection,
-    sortByFantasyPoints
+    sortByFantasyPoints,
+    setLineups,
+    setTotalplayers,
+    setIsOptimized,
+    setClearEveryStates
 };

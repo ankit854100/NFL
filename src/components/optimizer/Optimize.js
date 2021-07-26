@@ -22,7 +22,7 @@ import salaryCap, {
   playerVsDefence,
   browserOrServer,
 } from "../../redux/optimizer/actionContainer";
-import { playersData } from "../../data";
+import {setLineups, setTotalplayers, setIsOptimized, setClearEveryStates} from "../../redux/Bottom/ActionContainer";
 
 import axios from "axios";
 
@@ -61,6 +61,7 @@ const mapStateToProps = (state) => {
     myPlayer: state.table.myPlayer,
     lockedPlayer: state.table.lockedPlayer,
     correlation: state.stack.correlation,
+    correlationArray: state.stack.correlationArray,
     legacy: state.stack.legacy,
     perTeam: state.stack.perTeam,
     combination: state.stack.combination,
@@ -89,7 +90,11 @@ const mapDispatchToProps = (dispatch) => {
     handleBrowserOrServer: (value) => dispatch(browserOrServer(value)),
     setExcludedPlayer: (value) => dispatch(setExcludedPlayer(value)),
     setAllPlayer: (value) => dispatch(setAllPlayer(value)),
-    setFinalTotal: (value) => dispatch(setFinalTotal(value))
+    setFinalTotal: (value) => dispatch(setFinalTotal(value)),
+    setLineups: (value) => dispatch(setLineups(value)),
+    setTotalplayers: (value) => dispatch(setTotalplayers(value)),
+    setIsOptimized: (value) => dispatch(setIsOptimized(value)),
+    setClearEveryStates: () => dispatch(setClearEveryStates())
   };
 };
 
@@ -477,7 +482,8 @@ function Optimize(props) {
     // console.log(projectOwnCap);
     // console.log(lineup);
     // console.log(passCatcher);
-    props.allowBottom(true);
+    props.allowBottom(false);
+    props.setClearEveryStates();
 
     const teamVsAgainst = props.games.map((game) => {
       return {"away_team": game.away_team, "home_team": game.home_team};
@@ -485,12 +491,15 @@ function Optimize(props) {
     
     const arr = {
       "stacking": {
-                    "correlation": props.correlation.values.length > 0 ? 1: 0,
+                    "correlation": props.correlation,
                     "legacy": props.legacy.length > 0 ? 1: 0,
                     "per_team": props.perTeam.length > 0 ? 1: 0,
                     "player_combination": props.combination.length > 0 ? 1: 0
                   },
-      "correlation": props.correlation,
+      "correlation": {
+        "universal": props.correlation,
+        "values": props.correlationArray
+      },
       "legacy": props.legacy,
       "perTeam": props.perTeam,
       "combination": props.combination,
@@ -511,12 +520,29 @@ function Optimize(props) {
       "opposite_team": teamVsAgainst
     }
 
-    axios.post("http://127.0.0.1:8000/items/", arr,)
+    axios.post("http://127.0.0.1:8000/items/",  JSON.stringify(arr), {headers:{"Content-Type" : "application/json"}})
     .then((response) => {
-      console.log(response);
+      console.log("response: ",response.data);
+      if(response.data.is_optimised){
+        response.data.lineups.forEach(lineup => {
+          props.setLineups({...lineup, isChecked: true});
+        });
+  
+        response.data.total_players.forEach(player => {
+          props.setTotalplayers({...player, isChecked: true});
+        }); 
+        
+        props.setIsOptimized(response.data.is_optimised);
+        props.allowBottom(true);
+      }
+      else{
+        alert("choose constraints correctly");
+      }
     })
     .catch((err) => {
-      console.log(err);
+      console.log("error from optimizer", err);
+
+      alert("error occurred: ", err);
     });
 
     // console.log(arr);
@@ -532,7 +558,7 @@ function Optimize(props) {
 
   return (
     <div className="optimizer">
-    <a id="downloadAnchorElem" style={{display:"none"}}></a>
+    {/* <a id="downloadAnchorElem" style={{display:"none"}}></a> */}
       <div className="optimizer-left">
         <div className="optimizer-top">
           <div className="first-col">

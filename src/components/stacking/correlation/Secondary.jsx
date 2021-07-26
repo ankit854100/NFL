@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import SecondaryPlayerPanel from "./SecondaryPlayerPanel";
 import { connect } from "react-redux";
-import {setCorrelationArray} from "../../../redux/stack/actionContainer";
+import {setCorrelationArray, setDeleteCorrelation} from "../../../redux/stack/actionContainer";
 import Button from "react-bootstrap/Button";
 
 const mapStateToProps = (state) => {
@@ -13,7 +13,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setCorrelationArray: (value) => dispatch(setCorrelationArray(value))
+    setCorrelationArray: (value) => dispatch(setCorrelationArray(value)),
+    setDeleteCorrelation: (value) => dispatch(setDeleteCorrelation(value))
   };
 };
 
@@ -39,6 +40,7 @@ function Secondary(props) {
   const [noMore1, setNoMore1] = useState("3");
   const [noLess2, setNoLess2] = useState("1");
   const [noMore2, setNoMore2] = useState("3");
+  // const [stateID,  setStateID] = useState({});
 
   function handleNumOfLineups(e){
     setNumOfLineups(e.target.value);
@@ -90,8 +92,10 @@ function Secondary(props) {
 
         for(let j = 0; j < props.games.length; j++){
           if(props.games[j].home_team === props.total[i].team){
-            // console.log(props.games[j].away_team);
             setOpp(props.games[j].away_team);
+          }
+          else if(props.games[j].away_team === props.total[i].team){
+            setOpp(props.games[j].home_team);
           }
         }
         break;
@@ -116,7 +120,11 @@ function Secondary(props) {
   }
 
   function crossDeleteHandler(){
-    props.onDelete(props.id);
+    props.onDelete();
+    // props.onDelete(props.id);
+    props.setDeleteCorrelation();
+    // props.setDeleteCorrelation(stateID);
+
   }
 
   function addValues(){
@@ -131,7 +139,7 @@ function Secondary(props) {
       const third_option = RBWRsame === true? 1: 0;
       const fourth_option = RBDEFsame === true? 1: 0;
       const five_option = WRTEsameWRTE === true? 1: 0;
-      var output = {
+      const output = {
                       "game": game_flag,
                       "Team": team_flag,
                       "player": QBPlayer,
@@ -139,8 +147,9 @@ function Secondary(props) {
                       "flags": [first_option, second_option, third_option, fourth_option, five_option],
                       "team_constraint": {"No_less_than": parseInt(noLess1),"No_more_than": parseInt(noMore1)},
                       "opp_team_constraint": {"No_less_than": parseInt(noLess2), "No_more_than": parseInt(noMore2)}
-                    }
+                    };
 
+      // setStateID(output);
       props.setCorrelationArray(output);
     }
     // console.log(output);

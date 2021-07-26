@@ -1,4 +1,4 @@
-import { COMBINATION, CORRELATION, CORRELATION_ARRAY, DELETE_COMBINATION, DELETE_LEGACY, DELETE_PER_TEAM, LEGACY, PER_TEAM } from "./actionTypes";
+import { CLEAR_INDEX, COMBINATION, CORRELATION, CORRELATION_ARRAY, DELETE_COMBINATION, DELETE_CORRELATION, DELETE_LEGACY, DELETE_PER_TEAM, INCREMENT_INDEX, LEGACY, PER_TEAM } from "./actionTypes";
 
 
 function setCorrelation(value){
@@ -57,6 +57,12 @@ function setDeleteCombination(value){
     }
 }
 
+function setDeleteCorrelation(){
+    return {
+        type: DELETE_CORRELATION
+    }
+}
+
 export {
     setCorrelation,
     setLegacy,
@@ -65,5 +71,6 @@ export {
     setCorrelationArray,
     setDeleteLegacy,
     setDeletePerTeam,
-    setDeleteCombination
+    setDeleteCombination,
+    setDeleteCorrelation
 }
