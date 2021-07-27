@@ -98,7 +98,7 @@ function Combination(props) {
   function callWhenIn(){
     // console.log(player1.length, number2);
     if(player1.length !== parseInt(number2)){
-      alert("please choose appropriate number of players");
+      alert("please choose appropriate number of players or clear the list and choose again");
     }
     else{
       let value = "Stack between " + number1 + " and " + number2 +" of " + player1.map((p) => p);
@@ -113,16 +113,18 @@ function Combination(props) {
       let arr = {"items": 1, "mini1": parseInt(number1), "maxi1": parseInt(number2), "player1": player1, "mini2": parseInt(number3), "maxi2": parseInt(number3), "player2": player2, "num_line_ups": parseInt(number3)};
       setStackingArray([...stackingArray, {text: value, output: arr}]);
       props.setCombination(arr);
+      setPlayer1([]);
+      setPlayer2([]);
       // console.log(arr);
     }
   }
 
   function callWhenAnd(){
     if(player1.length < number2 || player2.length < number4 || player1.length > number2 || player2.length > number4){
-      alert("please select appropriate number of players");
+      alert("please select appropriate number of players or clear the list and choose again");
     }
     else if(checkArray(player1, player2)){
-      alert("Choose different players");
+      alert("Choose different players or clear the list and choose again");
     }
     else{
       let value = "Stack between " + number1 + " and " + number2 +" of " + player1.map((p) => p) + " and between " + number3 + " and " + number4 +" of " + player2.map((p) => p);
@@ -137,6 +139,8 @@ function Combination(props) {
       let arr = {"items": 2, "mini1": parseInt(number1), "maxi1": parseInt(number2), "player1": player1, "mini2": parseInt(number3), "maxi2": parseInt(number4), "player2": player2, "num_line_ups": parseInt(num_of_lineups)};
       setStackingArray([...stackingArray, {text: value, output: arr}]);
       props.setCombination(arr);
+      setPlayer1([]);
+      setPlayer2([]);
       // console.log(arr);
     }
   }

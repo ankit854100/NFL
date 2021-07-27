@@ -31,7 +31,7 @@ export default function App() {
     <Provider store={store}>
       <div className="app">
         {/* <Mode /> */}
-        <ModeV2 allowPlayerList={handlePlayerList}/>
+        <ModeV2 allowPlayerList={handlePlayerList} playerList={playerList}/>
         {playerList && <Correlation />}
         {playerList && <Legecy />}
         {playerList && <PerTeam />}

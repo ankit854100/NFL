@@ -112,6 +112,7 @@ function setClearEveryStates(){
     }
 }
 
+
 export default setAllClick;
 
 export {

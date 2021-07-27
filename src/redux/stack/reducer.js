@@ -1,5 +1,5 @@
 import PerTeam from "../../components/stacking/PerTeam";
-import { CLEAR_INDEX, COMBINATION, CORRELATION, CORRELATION_ARRAY, DELETE_COMBINATION, DELETE_CORRELATION, DELETE_LEGACY, DELETE_PER_TEAM, INCREMENT_INDEX, LEGACY, PER_TEAM } from "./actionTypes";
+import { CLEAR_INDEX, CLEAR_STACKING, COMBINATION, CORRELATION, CORRELATION_ARRAY, DELETE_COMBINATION, DELETE_CORRELATION, DELETE_LEGACY, DELETE_PER_TEAM, INCREMENT_INDEX, LEGACY, PER_TEAM } from "./actionTypes";
 
 const initialState = {
     correlationArray: [],
@@ -66,6 +66,14 @@ function reducer(state = initialState, action){
         case DELETE_CORRELATION: return{
             ...state,
             correlationArray: []
+        }
+
+        case CLEAR_STACKING: return {
+            correlationArray: [],
+            correlation: 1,
+            legacy: [],
+            perTeam: [],
+            combination: []
         }
 
         default: return state;

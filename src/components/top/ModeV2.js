@@ -4,7 +4,9 @@ import Option from "./Option";
 import GameBox from "./GameBox";
 import { game } from "../../data";
 import selectTeam, {selectSlate, setClearSelected, setGames, setIcons, unselectTeam, setSlatePlayers, setClearSlatePlayer} from "../../redux/GameBox/actionContainer";
+import {setClearStacking} from "../../redux/stack/actionContainer"
 import {connect} from "react-redux";
+import Loader from "../Loader";
 
 const gameTypesDraftKings = ["CLASSIC", "TIERS", "SHOWDOWN"];
 
@@ -34,7 +36,8 @@ const mapDispatchToProps = (dispatch) => {
     setGames: (value) => dispatch(setGames(value)),
     setIcons: (value) => dispatch(setIcons(value)),
     setSlatePlayers: (value) => dispatch(setSlatePlayers(value)),
-    setClearSlatePlayer: (value) => dispatch(setClearSlatePlayer())
+    setClearSlatePlayer: (value) => dispatch(setClearSlatePlayer()),
+    setClearStacking: () => dispatch(setClearStacking())
   };
 }
 
@@ -57,7 +60,6 @@ function Mode(props) {
 
   const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
   const [isPlayerError, setIsPlayerError] = useState(null);
-
   useEffect(() => {
     // "https://api.fantasynerds.com/v1/nfl/dfs-slates?apikey=TEST"
     fetch("https://api.fantasynerds.com/v1/nfl/dfs-slates?apikey=TEST")
@@ -170,6 +172,7 @@ function Mode(props) {
         (result) => {
           setIsPlayerLoaded(true);
           props.setClearSlatePlayer();
+          props.setClearStacking();
           result.players.forEach((player, index) => {
               player.salary = parseInt(player.salary);
               player.playerId = parseInt(player.playerId);
@@ -400,6 +403,8 @@ function Mode(props) {
           </div>
         </div>
       ) : null}
+
+      {/* {gameLoaded && !props.playerList ? <Loader /> : null} */}
     </React.Fragment>
   );
 }

@@ -23,6 +23,7 @@ import salaryCap, {
   browserOrServer,
 } from "../../redux/optimizer/actionContainer";
 import {setLineups, setTotalplayers, setIsOptimized, setClearEveryStates} from "../../redux/Bottom/ActionContainer";
+import Loader from "../Loader";
 
 import axios from "axios";
 
@@ -65,7 +66,8 @@ const mapStateToProps = (state) => {
     legacy: state.stack.legacy,
     perTeam: state.stack.perTeam,
     combination: state.stack.combination,
-    games: state.gamebox.games
+    games: state.gamebox.games,
+    icons: state.gamebox.icons
   };
 };
 
@@ -126,6 +128,7 @@ function Optimize(props) {
   const [TE, setTE] = useState(true);
   const [DST, setDST] = useState(true);
   const [projOwn, setProjOwn] = useState(100);
+  const [isDataReceived, setIsDataReceived] = useState(true);
 
   const [excludedList, setExcludedList] = useState([]);
 
@@ -483,6 +486,7 @@ function Optimize(props) {
     // console.log(lineup);
     // console.log(passCatcher);
     props.allowBottom(false);
+    setIsDataReceived(false);
     props.setClearEveryStates();
 
     const teamVsAgainst = props.games.map((game) => {
@@ -525,6 +529,17 @@ function Optimize(props) {
       console.log("response: ",response.data);
       if(response.data.is_optimised){
         response.data.lineups.forEach(lineup => {
+
+          for(let i = 0; i < lineup.players.length; i++){
+            for(let j = 0; j < props.icons.length; j++){
+              if(props.icons[j].team_code === lineup.players[i].team){
+                // console.log(lineup.players[i].team, props.icons[j].logo_standard);
+                lineup.players[i]["team_url"] = props.icons[j].logo_standard;
+                break;
+              }
+            }
+          }
+
           props.setLineups({...lineup, isChecked: true});
         });
   
@@ -533,6 +548,7 @@ function Optimize(props) {
         }); 
         
         props.setIsOptimized(response.data.is_optimised);
+        setIsDataReceived(true);
         props.allowBottom(true);
       }
       else{
@@ -541,8 +557,8 @@ function Optimize(props) {
     })
     .catch((err) => {
       console.log("error from optimizer", err);
-
-      alert("error occurred: ", err);
+      setIsDataReceived(true);
+      alert("Has no optimal solution for the given constraints and players");
     });
 
     // console.log(arr);
@@ -553,12 +569,12 @@ function Optimize(props) {
     // dlAnchorElem.setAttribute("download", "optimizer_input.json");
     // dlAnchorElem.click();
 
-    // console.log(arr);
+    // // console.log(arr);
   }
 
   return (
     <div className="optimizer">
-    {/* <a id="downloadAnchorElem" style={{display:"none"}}></a> */}
+    <a id="downloadAnchorElem" style={{display:"none"}}></a>
       <div className="optimizer-left">
         <div className="optimizer-top">
           <div className="first-col">
@@ -837,8 +853,9 @@ function Optimize(props) {
         </div>
       </div>
       {/* <div className="optimizer-right"> */}
-      <Button varient="primary" onClick={handleButtonClick}>
-        OPTIMIZE
+      <Button varient="primary" onClick={handleButtonClick} disabled={isDataReceived === true ? false: true}>
+        {isDataReceived && <span>OPTIMIZE</span>}
+        {!isDataReceived && <Loader />}
       </Button>
       {/* </div> */}
       <style jsx>{`

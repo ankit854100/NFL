@@ -75,7 +75,7 @@ export default function LineupInfo(props) {
                         </td>
                         <td>
                           <img className="mood-icon" 
-                          src=""
+                          src={data.team_url}
                           alt="" />
                         </td>
                         <td>{data.salary}</td>

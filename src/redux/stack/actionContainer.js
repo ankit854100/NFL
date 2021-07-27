@@ -1,4 +1,4 @@
-import { CLEAR_INDEX, COMBINATION, CORRELATION, CORRELATION_ARRAY, DELETE_COMBINATION, DELETE_CORRELATION, DELETE_LEGACY, DELETE_PER_TEAM, INCREMENT_INDEX, LEGACY, PER_TEAM } from "./actionTypes";
+import { CLEAR_INDEX, CLEAR_STACKING, COMBINATION, CORRELATION, CORRELATION_ARRAY, DELETE_COMBINATION, DELETE_CORRELATION, DELETE_LEGACY, DELETE_PER_TEAM, INCREMENT_INDEX, LEGACY, PER_TEAM } from "./actionTypes";
 
 
 function setCorrelation(value){
@@ -63,6 +63,12 @@ function setDeleteCorrelation(){
     }
 }
 
+function setClearStacking(){
+    return{
+        type: CLEAR_STACKING
+    }
+}
+
 export {
     setCorrelation,
     setLegacy,
@@ -72,5 +78,6 @@ export {
     setDeleteLegacy,
     setDeletePerTeam,
     setDeleteCombination,
-    setDeleteCorrelation
+    setDeleteCorrelation,
+    setClearStacking
 }

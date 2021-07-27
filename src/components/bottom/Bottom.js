@@ -255,9 +255,9 @@ function Bottom(props) {
                     <strong>{props.lineups.length}</strong> LINEUPS
                   </span>
                 </div>
-                <Button varient="primary" onClick={handleOptimize}>
+                {/* <Button varient="primary" onClick={handleOptimize}>
                   <strong>OPTIMIZE</strong>
-                </Button>
+                </Button> */}
               </div>
               <div className="first-bottom-positions">
                 <span
@@ -507,6 +507,8 @@ function Bottom(props) {
         .first-bottom-table {
           font-size: 13px;
           color: #707070;
+          height: 615px;
+          overflow: auto;
         }
 
         .first-bottom-table table {
