@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { Multiselect } from "multiselect-react-dropdown";
 import ShowStacking from "./ShowStaking";
 import {connect} from "react-redux"
-import {setLegacy, setDeleteLegacy} from "../../redux/stack/actionContainer"
+import {setLegacy, setDeleteLegacy, setLegacyStackingArray, removeLegacyStackingArray} from "../../redux/stack/actionContainer"
 import ShowLegacyStacking from "./ShowLegacyStacking";
 
 // const players = [
@@ -16,19 +16,22 @@ import ShowLegacyStacking from "./ShowLegacyStacking";
 // ];
 
 const numbers = ["0", "1", "2", "3", "4"];
-const positions = ["QB", "RB", "WR", "TE", "DEF"];
+// const positions = ["QB", "RB", "WR", "TE", "DEF"];
 
 const mapStateToProps = (state) => {
   return {
     total: state.table.total,
-    legacy: state.stack.legacy
+    legacy: state.stack.legacy,
+    stackingLegacy: state.stack.stackingarray
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setLegacy: (value) => dispatch(setLegacy(value)),
-    setDeleteLegacy: (value) => dispatch(setDeleteLegacy(value))
+    setDeleteLegacy: (value) => dispatch(setDeleteLegacy(value)),
+    setLegacyStackingArray: (value) => dispatch(setLegacyStackingArray(value)),
+    removeLegacyStackingArray: (value) => dispatch(removeLegacyStackingArray(value))
   };
 };
 
@@ -46,7 +49,10 @@ function Legacy(props) {
   const [stackingArray, setStackingArray] = useState([]);
   const [players, setPlayers] = useState([]);
   const [multiSelectPlayers, setMultiSelectPlayers] = useState([]);
-  const [selected, setSelected] = useState([]);
+  const [positions, setPositions] = useState(["QB", "RB", "WR", "TE", "DEF"]);
+
+  const positionMultiSelectRef = useRef();
+  const playerMultiSelectRef = useRef();
 
   function handleTeam(e) {
     setTeam(e.target.value);
@@ -67,12 +73,13 @@ function Legacy(props) {
   function handlePosition(e) {
     setPosition(e.target.value);
 
-    setPlayer("select player");
+    // setPlayer("select player");
     setPlayerWithPosition(e.target.value);
     setMultiSelectPlayers(
       props.total.map((p) => p.name)
     );
-    setPlayerMultiSelect([]);
+    setPositions(positions.filter((p) => p !== e.target.value));
+    // setPlayerMultiSelect([]); 
   }
 
   function setPlayerWithPosition(pos){
@@ -88,7 +95,7 @@ function Legacy(props) {
 
   function handlePlayer(e) {
     setPlayer(e.target.value);
-    setPlayerMultiSelect([]);
+    // setPlayerMultiSelect([]);
   }
 
   function handleRadio(e) {
@@ -100,7 +107,7 @@ function Legacy(props) {
   }
 
   function onRemovePosition(selectedList, removedItem) {
-    const list = positionMultiSelect.filter((p) => p === removedItem);
+    const list = positionMultiSelect.filter((p) => p !== removedItem);
     setPositionMultiSelect(list);
   }
 
@@ -109,7 +116,7 @@ function Legacy(props) {
   }
 
   function onRemovePlayer(selectedList, removedItem) {
-    const list = playerMultiSelect.filter((p) => p === removedItem);
+    const list = playerMultiSelect.filter((p) => p !== removedItem);
     setPlayerMultiSelect(list);
   }
 
@@ -122,8 +129,10 @@ function Legacy(props) {
       const different_flag = team === "opposite" ? 1: 0;
       output = {"position": position, "player": player, "position_flag": radio === "position" ? 1: 0, "player_flag": radio === "player" ? 1: 0, "type1": amount, "num_of_players": parseInt(number), "player_positions": positionMultiSelect.map((pos) => pos), "players_list": [], "same_team": team_flag, "different_team": different_flag};
       setStackingArray([...stackingArray, {text: text, output: output}]);
+      props.setLegacyStackingArray({text: text, output: output});
       // console.log(stackingArray);
       props.setLegacy(output);
+      resetValuesPositions();
     }
     else{
       // setPositionMultiSelect([]);
@@ -142,14 +151,44 @@ function Legacy(props) {
         setStackingArray([...stackingArray, {text: text, output: output}]);
         // console.log(stackingArray);
         props.setLegacy(output);
+        resetValuesPlayers();
       }
     }
     // console.log(output);
   }
 
+  function resetValuesPositions(){
+    positionMultiSelectRef.current.resetSelectedValues();
+    setPosition("");
+    setPlayer("select player");
+    setRadio("position");
+    setAmount("no_less_than");
+    setNumber("0");
+    setTeam("same");
+    setPositionMultiSelect([]);
+    setPlayerMultiSelect([]);
+    setPlayers([]);
+    setPositions(["QB", "RB", "WR", "TE", "DEF"]);
+  }
+
+  function resetValuesPlayers(){
+    playerMultiSelectRef.current.resetSelectedValues();
+    setPosition("");
+    setPlayer("select player");
+    setRadio("position");
+    setAmount("no_less_than");
+    setNumber("0");
+    setTeam("same");
+    setPositionMultiSelect([]);
+    setPlayerMultiSelect([]);
+    setPlayers([]);
+    setPositions(["QB", "RB", "WR", "TE", "DEF"]);
+  }
+
   function deleteFromStackingArray(index){
     // stackingArray.splice(index, 1);
     const spliced = stackingArray.slice(0, index.id).concat(stackingArray.slice(index.id + 1, stackingArray.length));
+    // props.removeLegacyStackingArray(index.id);
     props.setDeleteLegacy(index.output);
     // console.log(index, spliced);
     setStackingArray(spliced);
@@ -250,6 +289,7 @@ function Legacy(props) {
                   {radio === "position" &&
                     <div className="multiselect-wrapper">
                       <Multiselect
+                        ref= {positionMultiSelectRef}
                         options={positions}
                         onSelect={onSelectPosition}
                         onRemove={onRemovePosition}
@@ -261,11 +301,11 @@ function Legacy(props) {
                   {radio === "player" && 
                     <div className="multiselect-wrapper">
                       <Multiselect
+                        ref= {playerMultiSelectRef}
                         options={multiSelectPlayers}
                         onSelect={onSelectPlayer}
                         onRemove={onRemovePlayer}
                         isObject={false}
-                        selectedValues={selected}
                       />
                     </div>
                   }

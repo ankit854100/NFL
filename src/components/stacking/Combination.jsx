@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { Multiselect } from "multiselect-react-dropdown";
 import ShowStacking from "./ShowStaking";
@@ -45,6 +45,9 @@ function Combination(props) {
   const [player2, setPlayer2] = useState([]);
   const [players, setPlayers] = useState();
 
+  const multiSelectRef1 = useRef();
+  const multiSelectRef2 = useRef();
+
   useEffect(() => {
       let arr = props.total.map((player) => {
         return player.name}
@@ -83,6 +86,8 @@ function Combination(props) {
 
   function handleCombination() {
     setCombination(!combination);
+
+    // resetValues();
   }
 
   function handleAddRule(){
@@ -102,7 +107,8 @@ function Combination(props) {
     }
     else{
       let value = "Stack between " + number1 + " and " + number2 +" of " + player1.map((p) => p);
-      let num_of_lineups = lineup;
+      let num_of_lineups = parseInt(textInput) > props.numOfLineups ? props.numOfLineups: parseInt(textInput);
+      
       if(lineup === "min"){
         value += "min " + textInput + " lineups.";
       }
@@ -110,11 +116,10 @@ function Combination(props) {
         value += "all lineups";
         num_of_lineups = props.numOfLineups;
       }
-      let arr = {"items": 1, "mini1": parseInt(number1), "maxi1": parseInt(number2), "player1": player1, "mini2": parseInt(number3), "maxi2": parseInt(number3), "player2": player2, "num_line_ups": parseInt(number3)};
+      let arr = {"items": 1, "mini1": parseInt(number1), "maxi1": parseInt(number2), "player1": player1, "mini2": parseInt(number3), "maxi2": parseInt(number4), "player2": player2, "num_line_ups": parseInt(num_of_lineups)};
       setStackingArray([...stackingArray, {text: value, output: arr}]);
       props.setCombination(arr);
-      setPlayer1([]);
-      setPlayer2([]);
+      resetValuesIn();
       // console.log(arr);
     }
   }
@@ -128,7 +133,7 @@ function Combination(props) {
     }
     else{
       let value = "Stack between " + number1 + " and " + number2 +" of " + player1.map((p) => p) + " and between " + number3 + " and " + number4 +" of " + player2.map((p) => p);
-      let num_of_lineups = textInput > props.numOfLineups ? props.numOfLineups: textInput;
+      let num_of_lineups = parseInt(textInput) > props.numOfLineups ? props.numOfLineups: parseInt(textInput);
       if(lineup === "min"){
         value += "min " + textInput + " lineups.";
       }
@@ -139,11 +144,38 @@ function Combination(props) {
       let arr = {"items": 2, "mini1": parseInt(number1), "maxi1": parseInt(number2), "player1": player1, "mini2": parseInt(number3), "maxi2": parseInt(number4), "player2": player2, "num_line_ups": parseInt(num_of_lineups)};
       setStackingArray([...stackingArray, {text: value, output: arr}]);
       props.setCombination(arr);
-      setPlayer1([]);
-      setPlayer2([]);
+      resetValuesAnd();
       // console.log(arr);
     }
   }
+
+  function resetValuesIn(){
+    multiSelectRef1.current.resetSelectedValues();
+    setPlayer1([]);
+    setPlayer2([]);
+    setNumber1("0");
+    setNumber2("1");
+    setNumber3("0");
+    setNumber4("1");
+    setInAnd("in");
+    setLineUp("min");
+    setInput(1);
+  }
+
+  function resetValuesAnd(){
+    multiSelectRef1.current.resetSelectedValues();
+    multiSelectRef2.current.resetSelectedValues();
+    setPlayer1([]);
+    setPlayer2([]);
+    setNumber1("0");
+    setNumber2("1");
+    setNumber3("0");
+    setNumber4("1");
+    setInAnd("in");
+    setLineUp("min");
+    setInput(1);
+  }
+
 
   function checkArray(arr1, arr2){
     const val = arr1.some(item => arr2.includes(item))
@@ -229,7 +261,7 @@ function Combination(props) {
                   <strong className="first-text">of</strong>
 
                   <div className="multiselect-wrapper">
-                    <Multiselect options={players} isObject={false} onSelect={onSelect1} onRemove={onRemove1} />
+                    <Multiselect ref={multiSelectRef1} options={players} isObject={false} onSelect={onSelect1} onRemove={onRemove1} />
                   </div>
                   <select
                     className="dropdown"
@@ -270,7 +302,7 @@ function Combination(props) {
                       <strong className="first-text">of</strong>
 
                       <div className="multiselect-wrapper">
-                        <Multiselect options={players} isObject={false} onSelect={onSelect2} onRemove={onRemove2} />
+                        <Multiselect ref={multiSelectRef2} options={players} isObject={false} onSelect={onSelect2} onRemove={onRemove2} />
                       </div>
                     </React.Fragment>
                   }

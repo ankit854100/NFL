@@ -20,7 +20,7 @@ import salaryCap, {
   projectionOrFpts,
   uniquePLayer,
   playerVsDefence,
-  browserOrServer,
+  browserOrServer
 } from "../../redux/optimizer/actionContainer";
 import {setLineups, setTotalplayers, setIsOptimized, setClearEveryStates} from "../../redux/Bottom/ActionContainer";
 import Loader from "../Loader";
@@ -95,8 +95,7 @@ const mapDispatchToProps = (dispatch) => {
     setFinalTotal: (value) => dispatch(setFinalTotal(value)),
     setLineups: (value) => dispatch(setLineups(value)),
     setTotalplayers: (value) => dispatch(setTotalplayers(value)),
-    setIsOptimized: (value) => dispatch(setIsOptimized(value)),
-    setClearEveryStates: () => dispatch(setClearEveryStates())
+    setIsOptimized: (value) => dispatch(setIsOptimized(value))
   };
 };
 
@@ -485,81 +484,86 @@ function Optimize(props) {
     // console.log(projectOwnCap);
     // console.log(lineup);
     // console.log(passCatcher);
-    props.allowBottom(false);
-    setIsDataReceived(false);
-    props.setClearEveryStates();
-
-    const teamVsAgainst = props.games.map((game) => {
-      return {"away_team": game.away_team, "home_team": game.home_team};
-    })
-    
-    const arr = {
-      "stacking": {
-                    "correlation": props.correlation,
-                    "legacy": props.legacy.length > 0 ? 1: 0,
-                    "per_team": props.perTeam.length > 0 ? 1: 0,
-                    "player_combination": props.combination.length > 0 ? 1: 0
-                  },
-      "correlation": {
-        "universal": props.correlation,
-        "values": props.correlationArray
-      },
-      "legacy": props.legacy,
-      "perTeam": props.perTeam,
-      "combination": props.combination,
-      "optimizer_panel": {
-                          "sal_range": [props.salaryRange.first, props.salaryRange.second],
-                          "fp_range": [props.fpRange.first, props.fpRange.second],
-                          "sal_cap": [props.salaryCap.first, props.salaryCap.second],
-                          "ownership_cap": [props.projectedOwnershipCap.first, props.projectedOwnershipCap.second],
-                          "lineups": parseInt(props.numOfLineups),
-                          "flag_disallow": props.passCatcher,
-                          "forcing_flex": props.forcePlayer,
-                          "optimisation": props.projOrFpts,
-                          "uniqueness": parseInt(props.uniquePLayer)
-                          },
-      "total_player": props.myPlayer,
-      "locked_player": props.lockedPlayer,
-      "excludedPlayer": [],
-      "opposite_team": teamVsAgainst
+    if(props.myPlayer.length < 9){
+      alert("Select appropriate number of players");
     }
+    else{
+      props.allowBottom(false);
+      setIsDataReceived(false);
+      props.setClearEveryStates();
 
-    axios.post("http://127.0.0.1:8000/items/",  JSON.stringify(arr), {headers:{"Content-Type" : "application/json"}})
-    .then((response) => {
-      console.log("response: ",response.data);
-      if(response.data.is_optimised){
-        response.data.lineups.forEach(lineup => {
+      const teamVsAgainst = props.games.map((game) => {
+        return {"away_team": game.away_team, "home_team": game.home_team};
+      })
+      
+      const arr = {
+        "stacking": {
+                      "correlation": props.correlation,
+                      "legacy": props.legacy.length > 0 ? 1: 0,
+                      "per_team": props.perTeam.length > 0 ? 1: 0,
+                      "player_combination": props.combination.length > 0 ? 1: 0
+                    },
+        "correlation": {
+          "universal": props.correlation,
+          "values": props.correlationArray
+        },
+        "legacy": props.legacy,
+        "perTeam": props.perTeam,
+        "combination": props.combination,
+        "optimizer_panel": {
+                            "sal_range": [props.salaryRange.first, props.salaryRange.second],
+                            "fp_range": [props.fpRange.first, props.fpRange.second],
+                            "sal_cap": [props.salaryCap.first, props.salaryCap.second],
+                            "ownership_cap": [props.projectedOwnershipCap.first, props.projectedOwnershipCap.second],
+                            "lineups": parseInt(props.numOfLineups),
+                            "flag_disallow": props.passCatcher,
+                            "forcing_flex": props.forcePlayer,
+                            "optimisation": props.projOrFpts,
+                            "uniqueness": parseInt(props.uniquePLayer)
+                            },
+        "total_player": props.myPlayer,
+        "locked_player": props.lockedPlayer,
+        "excludedPlayer": [],
+        "opposite_team": teamVsAgainst
+      }
 
-          for(let i = 0; i < lineup.players.length; i++){
-            for(let j = 0; j < props.icons.length; j++){
-              if(props.icons[j].team_code === lineup.players[i].team){
-                // console.log(lineup.players[i].team, props.icons[j].logo_standard);
-                lineup.players[i]["team_url"] = props.icons[j].logo_standard;
-                break;
+      axios.post("http://127.0.0.1:8000/items/",  JSON.stringify(arr), {headers:{"Content-Type" : "application/json"}})
+      .then((response) => {
+        console.log("response: ",response.data);
+        if(response.data.is_optimised){
+          response.data.lineups.forEach(lineup => {
+
+            for(let i = 0; i < lineup.players.length; i++){
+              for(let j = 0; j < props.icons.length; j++){
+                if(props.icons[j].team_code === lineup.players[i].team){
+                  // console.log(lineup.players[i].team, props.icons[j].logo_standard);
+                  lineup.players[i]["team_url"] = props.icons[j].logo_standard;
+                  break;
+                }
               }
             }
-          }
 
-          props.setLineups({...lineup, isChecked: true});
-        });
-  
-        response.data.total_players.forEach(player => {
-          props.setTotalplayers({...player, isChecked: true});
-        }); 
-        
-        props.setIsOptimized(response.data.is_optimised);
+            props.setLineups({...lineup, isChecked: true});
+          });
+    
+          response.data.total_players.forEach(player => {
+            props.setTotalplayers({...player, isChecked: true});
+          }); 
+          
+          props.setIsOptimized(response.data.is_optimised);
+          setIsDataReceived(true);
+          props.allowBottom(true);
+        }
+        else{
+          alert("choose constraints correctly");
+        }
+      })
+      .catch((err) => {
+        console.log("error from optimizer", err);
         setIsDataReceived(true);
-        props.allowBottom(true);
-      }
-      else{
-        alert("choose constraints correctly");
-      }
-    })
-    .catch((err) => {
-      console.log("error from optimizer", err);
-      setIsDataReceived(true);
-      alert("Has no optimal solution for the given constraints and players");
-    });
+        alert("Has no optimal solution for the given constraints and players");
+      });
+    }
 
     // console.log(arr);
 

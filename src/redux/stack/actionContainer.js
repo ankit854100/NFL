@@ -1,4 +1,4 @@
-import { CLEAR_INDEX, CLEAR_STACKING, COMBINATION, CORRELATION, CORRELATION_ARRAY, DELETE_COMBINATION, DELETE_CORRELATION, DELETE_LEGACY, DELETE_PER_TEAM, INCREMENT_INDEX, LEGACY, PER_TEAM } from "./actionTypes";
+import { CLEAR_INDEX, CLEAR_STACKING, COMBINATION, CORRELATION, CORRELATION_ARRAY, DELETE_COMBINATION, DELETE_CORRELATION, DELETE_LEGACY, DELETE_PER_TEAM, INCREMENT_INDEX, LEGACY, PER_TEAM, REMOVE_STACKING_ARRAY_COMBINATION, REMOVE_STACKING_ARRAY_LEGACY, REMOVE_STACKING_ARRAY_PERTEAM, STACKING_ARRAY_COMBINATION, STACKING_ARRAY_LEGACY, STACKING_ARRAY_PERTEAM } from "./actionTypes";
 
 
 function setCorrelation(value){
@@ -69,6 +69,48 @@ function setClearStacking(){
     }
 }
 
+function setLegacyStackingArray(value){
+    return{
+        type: STACKING_ARRAY_LEGACY,
+        payload: value
+    }
+}
+
+function setPerTeamStackingArray(value){
+    return{
+        type: STACKING_ARRAY_PERTEAM,
+        payload: value
+    }
+}
+
+function setCombinationStackingArray(value){
+    return{
+        type: STACKING_ARRAY_COMBINATION,
+        payload: value
+    }
+}
+
+function removeLegacyStackingArray(value){
+    return{
+        type: REMOVE_STACKING_ARRAY_LEGACY,
+        payload: value
+    }
+}
+
+function removePerTeamStackingArray(value){
+    return{
+        type: REMOVE_STACKING_ARRAY_PERTEAM,
+        payload: value
+    }
+}
+
+function removeCombinationStackingArray(value){
+    return{
+        type: REMOVE_STACKING_ARRAY_COMBINATION,
+        payload: value
+    }
+}
+
 export {
     setCorrelation,
     setLegacy,
@@ -79,5 +121,11 @@ export {
     setDeletePerTeam,
     setDeleteCombination,
     setDeleteCorrelation,
-    setClearStacking
+    setClearStacking,
+    setLegacyStackingArray,
+    setPerTeamStackingArray,
+    setCombinationStackingArray,
+    removeCombinationStackingArray,
+    removePerTeamStackingArray,
+    removeLegacyStackingArray
 }

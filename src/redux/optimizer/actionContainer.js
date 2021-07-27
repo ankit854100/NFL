@@ -139,6 +139,7 @@ function browserOrServer(value) {
   };
 }
 
+
 export default salaryCap;
 export {
   salaryRange,
