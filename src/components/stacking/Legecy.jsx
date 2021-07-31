@@ -3,8 +3,9 @@ import Button from "react-bootstrap/Button";
 import { Multiselect } from "multiselect-react-dropdown";
 import ShowStacking from "./ShowStaking";
 import {connect} from "react-redux"
-import {setLegacy, setDeleteLegacy, setLegacyStackingArray, removeLegacyStackingArray} from "../../redux/stack/actionContainer"
+import {setLegacy, setDeleteLegacy} from "../../redux/stack/actionContainer"
 import ShowLegacyStacking from "./ShowLegacyStacking";
+import {setLegacyArray, deleteFromLegacyArray} from "../../redux/stackingData/ActionContainer";
 
 // const players = [
 //   "Patrick Mahomes",
@@ -22,7 +23,7 @@ const mapStateToProps = (state) => {
   return {
     total: state.table.total,
     legacy: state.stack.legacy,
-    stackingLegacy: state.stack.stackingarray
+    legacyArray: state.stackingData.legacyArray
   };
 };
 
@@ -30,8 +31,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setLegacy: (value) => dispatch(setLegacy(value)),
     setDeleteLegacy: (value) => dispatch(setDeleteLegacy(value)),
-    setLegacyStackingArray: (value) => dispatch(setLegacyStackingArray(value)),
-    removeLegacyStackingArray: (value) => dispatch(removeLegacyStackingArray(value))
+    setLegacyArray: (value) => dispatch(setLegacyArray(value)),
+    deleteFromLegacyArray: (value) => dispatch(deleteFromLegacyArray(value))
   };
 };
 
@@ -46,7 +47,6 @@ function Legacy(props) {
   const [team, setTeam] = useState("same");
   const [positionMultiSelect, setPositionMultiSelect] = useState([]);
   const [playerMultiSelect, setPlayerMultiSelect] = useState([]);
-  const [stackingArray, setStackingArray] = useState([]);
   const [players, setPlayers] = useState([]);
   const [multiSelectPlayers, setMultiSelectPlayers] = useState([]);
   const [positions, setPositions] = useState(["QB", "RB", "WR", "TE", "DEF"]);
@@ -78,7 +78,7 @@ function Legacy(props) {
     setMultiSelectPlayers(
       props.total.map((p) => p.name)
     );
-    setPositions(positions.filter((p) => p !== e.target.value));
+    // setPositions(positions.filter((p) => p !== e.target.value));
     // setPlayerMultiSelect([]); 
   }
 
@@ -128,9 +128,8 @@ function Legacy(props) {
       const team_flag = team === "same" ? 1: 0;
       const different_flag = team === "opposite" ? 1: 0;
       output = {"position": position, "player": player, "position_flag": radio === "position" ? 1: 0, "player_flag": radio === "player" ? 1: 0, "type1": amount, "num_of_players": parseInt(number), "player_positions": positionMultiSelect.map((pos) => pos), "players_list": [], "same_team": team_flag, "different_team": different_flag};
-      setStackingArray([...stackingArray, {text: text, output: output}]);
-      props.setLegacyStackingArray({text: text, output: output});
-      // console.log(stackingArray);
+      
+      props.setLegacyArray({text: text, output: output});
       props.setLegacy(output);
       resetValuesPositions();
     }
@@ -148,8 +147,8 @@ function Legacy(props) {
         const different_flag = team === "opposite" ? 1: 0;
         output = {"position": position, "player": player,"position_flag": radio === "position" ? 1: 0, "player_flag": radio === "player" ? 1: 0, "type1": amount, "num_of_players": parseInt(number), "player_positions": [], "players_list": playerMultiSelect.map((pos) => pos), "same_team": team_flag, "different_team": different_flag};
         const text = "Select " + position + " " + player + " with " + amount + " " + number + " " + playerMultiSelect.map((pos) => pos);
-        setStackingArray([...stackingArray, {text: text, output: output}]);
-        // console.log(stackingArray);
+        
+        props.setLegacyArray({text: text, output: output});
         props.setLegacy(output);
         resetValuesPlayers();
       }
@@ -186,12 +185,8 @@ function Legacy(props) {
   }
 
   function deleteFromStackingArray(index){
-    // stackingArray.splice(index, 1);
-    const spliced = stackingArray.slice(0, index.id).concat(stackingArray.slice(index.id + 1, stackingArray.length));
-    // props.removeLegacyStackingArray(index.id);
+    props.deleteFromLegacyArray(index);
     props.setDeleteLegacy(index.output);
-    // console.log(index, spliced);
-    setStackingArray(spliced);
   }
 
   return (
@@ -327,9 +322,9 @@ function Legacy(props) {
                   </Button>
                 </div>
               </div>
-              {stackingArray.length > 0 ? 
+              {props.legacyArray.length > 0 ? 
                 <div className="showstacking-container">
-                  {stackingArray.map((val, index) => {
+                  {props.legacyArray.map((val, index) => {
                     return <ShowStacking id={index} text={val} onDelete={deleteFromStackingArray}/>
                   })} 
                 </div> 

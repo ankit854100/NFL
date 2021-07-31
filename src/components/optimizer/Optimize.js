@@ -95,7 +95,8 @@ const mapDispatchToProps = (dispatch) => {
     setFinalTotal: (value) => dispatch(setFinalTotal(value)),
     setLineups: (value) => dispatch(setLineups(value)),
     setTotalplayers: (value) => dispatch(setTotalplayers(value)),
-    setIsOptimized: (value) => dispatch(setIsOptimized(value))
+    setIsOptimized: (value) => dispatch(setIsOptimized(value)),
+    setClearEveryStates: () => dispatch(setClearEveryStates())
   };
 };
 
@@ -478,12 +479,6 @@ function Optimize(props) {
   }
 
   function handleButtonClick() {
-    // console.log(salaryRange);
-    // console.log(FPRange);
-    // console.log(salaryCap);
-    // console.log(projectOwnCap);
-    // console.log(lineup);
-    // console.log(passCatcher);
     if(props.myPlayer.length < 9){
       alert("Select appropriate number of players");
     }
@@ -627,7 +622,7 @@ function Optimize(props) {
               </div>
               <div className="box">
                 <span className="heading-text"># of lineups</span>
-                <Slider min={1} max={300} step={1} callBack={handleLineUp} />
+                <Slider min={3} max={300} step={1} callBack={handleLineUp} />
               </div>
             </div>
           </div>

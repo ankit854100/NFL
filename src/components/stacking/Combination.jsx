@@ -5,29 +5,24 @@ import ShowStacking from "./ShowStaking";
 import { connect } from "react-redux";
 import { propTypes } from "react-bootstrap/esm/Image";
 import {setCombination, setDeleteCombination} from "../../redux/stack/actionContainer";
-
-// const players = [
-//   "Patrick Mahomes",
-//   "Tom Brady",
-//   "Ezekiel Elliott",
-//   "Saquon Barkley",
-//   "Aaron Rodgers",
-//   "Drew Brees"
-// ];
+import {setCombinationArray, deleteFromCombinationArray} from "../../redux/stackingData/ActionContainer";
 
 const numbers = ["1", "2", "3", "4"];
 
 const mapStateToProps = (state) => {
   return {
     total: state.table.total,
-    numOfLineups: state.optimizer.numOfLineups
+    numOfLineups: state.optimizer.numOfLineups,
+    combinationArray: state.stackingData.combinationArray
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setCombination: (value) => dispatch(setCombination(value)),
-    setDeleteCombination: (value) => dispatch(setDeleteCombination(value))
+    setDeleteCombination: (value) => dispatch(setDeleteCombination(value)),
+    setCombinationArray: (value) => dispatch(setCombinationArray(value)),
+    deleteFromCombinationArray: (value) => dispatch(deleteFromCombinationArray(value))
   };
 };
 
@@ -86,8 +81,6 @@ function Combination(props) {
 
   function handleCombination() {
     setCombination(!combination);
-
-    // resetValues();
   }
 
   function handleAddRule(){
@@ -101,7 +94,7 @@ function Combination(props) {
   }
 
   function callWhenIn(){
-    // console.log(player1.length, number2);
+
     if(player1.length !== parseInt(number2)){
       alert("please choose appropriate number of players or clear the list and choose again");
     }
@@ -117,10 +110,10 @@ function Combination(props) {
         num_of_lineups = props.numOfLineups;
       }
       let arr = {"items": 1, "mini1": parseInt(number1), "maxi1": parseInt(number2), "player1": player1, "mini2": parseInt(number3), "maxi2": parseInt(number4), "player2": player2, "num_line_ups": parseInt(num_of_lineups)};
-      setStackingArray([...stackingArray, {text: value, output: arr}]);
+
+      props.setCombinationArray({text: value, output: arr});
       props.setCombination(arr);
       resetValuesIn();
-      // console.log(arr);
     }
   }
 
@@ -142,10 +135,10 @@ function Combination(props) {
         num_of_lineups = props.numOfLineups;
       }
       let arr = {"items": 2, "mini1": parseInt(number1), "maxi1": parseInt(number2), "player1": player1, "mini2": parseInt(number3), "maxi2": parseInt(number4), "player2": player2, "num_line_ups": parseInt(num_of_lineups)};
-      setStackingArray([...stackingArray, {text: value, output: arr}]);
+
+      props.setCombinationArray({text: value, output: arr});
       props.setCombination(arr);
       resetValuesAnd();
-      // console.log(arr);
     }
   }
 
@@ -201,11 +194,8 @@ function Combination(props) {
   }
 
   function deleteFromStackingArray(index){
-    // stackingArray.splice(index, 1);
-    const spliced = stackingArray.slice(0, index.id).concat(stackingArray.slice(index.id + 1, stackingArray.length));
-    // console.log(index, spliced);
+    props.deleteFromCombinationArray(index);
     props.setDeleteCombination(index.output); 
-    setStackingArray(spliced);
   }
   return (
     <React.Fragment>
@@ -343,9 +333,9 @@ function Combination(props) {
                   </Button>
                 </div>
               </div>
-              {stackingArray.length > 0 ? 
+              {props.combinationArray.length > 0 ? 
                 <div className="showstacking-container">
-                  {stackingArray.map((val, index) => {
+                  {props.combinationArray.map((val, index) => {
                     return <ShowStacking id={index} text={val} onDelete={deleteFromStackingArray}/>
                   })}
                 </div> 

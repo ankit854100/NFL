@@ -4,7 +4,8 @@ import Option from "./Option";
 import GameBox from "./GameBox";
 import { game } from "../../data";
 import selectTeam, {selectSlate, setClearSelected, setGames, setIcons, unselectTeam, setSlatePlayers, setClearSlatePlayer} from "../../redux/GameBox/actionContainer";
-import {setClearStacking} from "../../redux/stack/actionContainer"
+import {setClearStacking} from "../../redux/stack/actionContainer";
+import {clearAllStackingArray} from "../../redux/stackingData/ActionContainer";
 import {connect} from "react-redux";
 import Loader from "../Loader";
 
@@ -37,7 +38,8 @@ const mapDispatchToProps = (dispatch) => {
     setIcons: (value) => dispatch(setIcons(value)),
     setSlatePlayers: (value) => dispatch(setSlatePlayers(value)),
     setClearSlatePlayer: (value) => dispatch(setClearSlatePlayer()),
-    setClearStacking: () => dispatch(setClearStacking())
+    setClearStacking: () => dispatch(setClearStacking()),
+    clearAllStackingArray: () => dispatch(clearAllStackingArray())
   };
 }
 
@@ -173,6 +175,7 @@ function Mode(props) {
           setIsPlayerLoaded(true);
           props.setClearSlatePlayer();
           props.setClearStacking();
+          props.clearAllStackingArray();
           result.players.forEach((player, index) => {
               player.salary = parseInt(player.salary);
               player.playerId = parseInt(player.playerId);

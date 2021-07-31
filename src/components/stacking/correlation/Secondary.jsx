@@ -150,7 +150,7 @@ function Secondary(props) {
                     };
 
       // setStateID(output);
-      props.setCorrelationArray(QBPlayer);
+      props.setCorrelationArray(output);
     }
     // console.log(output);
   }

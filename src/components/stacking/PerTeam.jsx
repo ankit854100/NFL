@@ -4,20 +4,24 @@ import "./stacking.css";
 import ShowStacking from "./ShowStaking";
 import { connect } from "react-redux";
 import {setPerTeam, setDeletePerTeam} from "../../redux/stack/actionContainer"
+import {setPerTeamArray, deletePerTeamArray} from "../../redux/stackingData/ActionContainer";
 
 const numbers = ["1", "2", "3", "4"];
 const teams = ["others", "GB", "LAR", "BUF", "BAL"];
 
 const mapStateToProps = (state) => {
   return {
-    selectedList: state.gamebox.selectedList
+    selectedList: state.gamebox.selectedList,
+    perTeamArray: state.stackingData.perTeamArray
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setPerTeam: (value) => dispatch(setPerTeam(value)),
-    setDeletePerTeam: (value) => dispatch(setDeletePerTeam(value))
+    setDeletePerTeam: (value) => dispatch(setDeletePerTeam(value)),
+    setPerTeamArray: (value) => dispatch(setPerTeamArray(value)),
+    deletePerTeamArray: (value) => dispatch(deletePerTeamArray(value))
   };
 };
 
@@ -26,7 +30,6 @@ function PerTeam(props) {
   const [amount, setAmount] = useState("atmost");
   const [number, setNumber] = useState("1");
   const [team, setTeam] = useState("others");
-  const [stackingArray, setStackingArray] = useState([]);
 
   function handleTeam(e) {
     setTeam(e.target.value);
@@ -48,13 +51,19 @@ function PerTeam(props) {
     const arr = {"type1": amount, "num_of_players": parseInt(number), "team": team};
     // console.log(arr);
     props.setPerTeam(arr);
-    setStackingArray([...stackingArray, {text: newValue, output: arr}]);
+    props.setPerTeamArray({text: newValue, output: arr});
+    resetValues();
     // console.log(stackingArray);
   }
 
+  function resetValues(){
+    setAmount("atmost");
+    setNumber("1");
+    setTeam("others");
+  }
+
   function deleteFromStackingArray(index){
-    const spliced = stackingArray.slice(0, index.id).concat(stackingArray.slice(index.id + 1, stackingArray.length));
-    setStackingArray(spliced);
+    props.deletePerTeamArray(index);
     props.setDeletePerTeam(index.output);
   }
 
@@ -124,9 +133,9 @@ function PerTeam(props) {
                   </Button>
                 </div>
               </div>
-              {stackingArray.length > 0 ? 
+              {props.perTeamArray.length > 0 ? 
                 <div className="showstacking-container">
-                  {stackingArray.map((val, index) => {
+                  {props.perTeamArray.map((val, index) => {
                     return <ShowStacking id={index} text={val} onDelete={deleteFromStackingArray}/>
                   })}
                 </div> 

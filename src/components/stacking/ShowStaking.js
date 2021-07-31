@@ -7,7 +7,7 @@ function ShowStacking(props){
     })
 
     function handleCrossClick(){
-        props.onDelete({id: props.id, output: props.text.output});
+        props.onDelete(props.text);
     }
     return(
         <div>
