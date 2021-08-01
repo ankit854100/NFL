@@ -522,7 +522,7 @@ function Optimize(props) {
         "opposite_team": teamVsAgainst
       }
 
-      // console.log(arr);
+      console.log(arr);
 
       axios.post("http://127.0.0.1:8000/items/",  JSON.stringify(arr), {headers:{"Content-Type" : "application/json"}})
       .then((response) => {
