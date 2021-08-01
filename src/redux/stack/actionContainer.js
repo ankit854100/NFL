@@ -57,9 +57,10 @@ function setDeleteCombination(value){
     }
 }
 
-function setDeleteCorrelation(){
+function setDeleteCorrelation(value){
     return {
-        type: DELETE_CORRELATION
+        type: DELETE_CORRELATION,
+        payload: value
     }
 }
 

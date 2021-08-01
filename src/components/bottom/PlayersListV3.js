@@ -501,7 +501,7 @@ function PlayerList(props) {
         <div className="info">
           <div className="info-list">
             <span style={{ borderRight: "2px solid #707070" }}>
-              <strong>{props.all.length}</strong> PLAYERS
+              <strong>{props.all.length}</strong> ALL PLAYERS
             </span>
             <span>
               LAST UPDATED <strong>18/01/2021 4:51 AM</strong>

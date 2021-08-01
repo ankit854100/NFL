@@ -14,7 +14,7 @@ export default function PlayerListItem(props) {
   const [chain, setChain] = useState(chainUrl[0]);
   const [lock, setLock] = useState(props.data.isLocked);
   const [select, setSelect] = useState(props.data.isChecked);
-  const [fpts, setFpts] = useState(props.data.proj_pts_aggressive);
+  const [fpts, setFpts] = useState(props.data.proj_pts_conservative);
   const [icon, setIcon] = useState({});
   const [awayIcon, setAwayIcon] = useState({});
   const [expMin, setExpMin] = useState(props.data.min_exp);

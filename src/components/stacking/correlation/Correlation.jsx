@@ -2,6 +2,7 @@ import React, { useState } from "react";
 // import "./stacking.css";
 import {connect} from "react-redux";
 import Secondary from "./Secondary";
+import SecondaryV2 from "./SecondaryV2";
 import Button from "react-bootstrap/Button";
 import {setCorrelation} from "../../../redux/stack/actionContainer";
 
@@ -42,20 +43,10 @@ function Correlation(props) {
   }
 
   function handleRuleClick() {
-    // rule = rule + 1;
-    // ruleArray.push(rule);
-    // setRules((oldArray) => [...oldArray, props.index]);
-    // console.log(rules);
-
     setSecond(true);    
-
-    // props.setCorrelation(output);
   }
 
   function deleteFromStackingArray(index){
-    // console.log("from correlation stacking: ", index);
-    // const spliced = rules.slice(0, index).concat(rules.slice(index + 1, rules.length));
-    // setRules(spliced);
     setSecond(false);
 
   }
@@ -118,6 +109,13 @@ function Correlation(props) {
                 {second &&
                   <div className="correlation-wrapper-bottom correlation-border-top">
                       <Secondary onDelete={deleteFromStackingArray}/>
+                  </div>
+                }
+                {props.correlationArray.length > 0 &&
+                  <div className="correlation-wrapper-bottom">
+                      {props.correlationArray.map(item => {
+                        return <SecondaryV2 data={item} onDelete={deleteFromStackingArray}/>;
+                      })}
                   </div>
                 }
                 <div className="correlation-add-rule" onClick={handleRuleClick}>

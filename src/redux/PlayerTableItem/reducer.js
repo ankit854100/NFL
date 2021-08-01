@@ -35,7 +35,7 @@ const initialState = {
 function changeALLFpts(arr, value) {
   if(arr.includes(value.data)){
     let temp = arr.filter((item) => item === value.data);
-    temp[0].proj_pts_aggressive = parseFloat(value.fpts);
+    temp[0].proj_pts_conservative = parseFloat(value.fpts);
     arr.push(temp[0]);
     return arr;
   }

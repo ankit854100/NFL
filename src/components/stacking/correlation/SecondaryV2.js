@@ -24,22 +24,27 @@ function Secondary(props) {
 
   const [stackNumber, setStackNumber] = useState("none");
   const [correlationBoost, setcorrelationBoost] = useState(false);
-  const [teamGame, setTeamGame] = useState("team");
-  const [QBPlayer, setQBPlayer] = useState("none");
-  const [team, setTeam] = useState([]);
-  const [opp, setOpp] = useState([]);
-  const [numOfLineups, setNumOfLineups] = useState(1);
+  const [teamGame, setTeamGame] = useState(props.data.Team === 1 ? "team": "game");
+  const [QBPlayer, setQBPlayer] = useState(props.data.player);
+  const [team, setTeam] = useState("");
+  const [opp, setOpp] = useState("");
+  const [numOfLineups, setNumOfLineups] = useState(props.data.min_lineups);
 
-  const [RBOppWRTE, setRBOppWRTE] = useState(true);
-  const [WROppWRTE, setWROppWRTE] = useState(true);
-  const [RBWRsame, setRBWRsame] = useState(true);
-  const [RBDEFsame, setRBDEFsame] = useState(true);
-  const [WRTEsameWRTE, setWRTEsameWRTE] = useState(true);
+  const [RBOppWRTE, setRBOppWRTE] = useState(props.data.flags[0] === 1? true: false);
+  const [WROppWRTE, setWROppWRTE] = useState(props.data.flags[1] === 1? true: false);
+  const [RBWRsame, setRBWRsame] = useState(props.data.flags[2] === 1? true: false);
+  const [RBDEFsame, setRBDEFsame] = useState(props.data.flags[3] === 1? true: false);
+  const [WRTEsameWRTE, setWRTEsameWRTE] = useState(props.data.flags[4] === 1? true: false);
 
-  const [noLess1, setNoLess1] = useState("1");
-  const [noMore1, setNoMore1] = useState("3");
-  const [noLess2, setNoLess2] = useState("1");
-  const [noMore2, setNoMore2] = useState("3");
+  const [noLess1, setNoLess1] = useState(props.data.team_constraint.No_less_than);
+  const [noMore1, setNoMore1] = useState(props.data.team_constraint.No_more_than);
+  const [noLess2, setNoLess2] = useState(props.data.opp_team_constraint.No_less_than);
+  const [noMore2, setNoMore2] = useState(props.data.opp_team_constraint.No_more_than);
+
+  useEffect(() => {
+    setTeamGame(props.data.Team === 1 ? "team": "game");
+    getTeamAndOppPlayers(props.data.player);
+  })
 
   function handleNumOfLineups(e){
     setNumOfLineups(e.target.value);
@@ -84,9 +89,13 @@ function Secondary(props) {
 
   function handleQBPlayerSelected(e){
     setQBPlayer(e.target.value);
+    getTeamAndOppPlayers(e.target.value);
+    
+  }
 
-    for(let i = 0; i < props.total.length; i++){
-      if(e.target.value === props.total[i].name){
+  function getTeamAndOppPlayers(value){
+      for(let i = 0; i < props.total.length; i++){
+      if(value === props.total[i].name){
         setTeam(props.total[i].team);
 
         for(let j = 0; j < props.games.length; j++){
@@ -119,62 +128,12 @@ function Secondary(props) {
   }
 
   function crossDeleteHandler(){
-    props.onDelete();
-    // props.onDelete(props.id);
-    // props.setDeleteCorrelation();
-    // props.setDeleteCorrelation(stateID);
-
-  }
-
-  function addValues(){
-    if(QBPlayer === "none"){
-      alert("Select a player");
-    }
-    else{
-      const team_flag = teamGame === "team" ? 1: 0;
-      const game_flag = teamGame === "game" ? 1: 0;
-      const first_option = RBOppWRTE === true ? 1: 0;
-      const second_option = WROppWRTE === true? 1: 0;
-      const third_option = RBWRsame === true? 1: 0;
-      const fourth_option = RBDEFsame === true? 1: 0;
-      const five_option = WRTEsameWRTE === true? 1: 0;
-      const output = {
-                      "game": game_flag,
-                      "Team": team_flag,
-                      "player": QBPlayer,
-                      "min_lineups": parseInt(numOfLineups),
-                      "flags": [first_option, second_option, third_option, fourth_option, five_option],
-                      "team_constraint": {"No_less_than": parseInt(noLess1),"No_more_than": parseInt(noMore1)},
-                      "opp_team_constraint": {"No_less_than": parseInt(noLess2), "No_more_than": parseInt(noMore2)}
-                    };
-
-      props.setCorrelationArray(output);
-      resetValues();
-    }
-  }
-
-  function resetValues(){
-
-    setcorrelationBoost(false);
-    setTeamGame("team");
-    setQBPlayer("none");
-    setTeam([]);
-    setOpp([]);
-    setNumOfLineups(1);
-    setRBOppWRTE(true);
-    setWROppWRTE(true);
-    setRBWRsame(true);
-    setRBDEFsame(true);
-    setWRTEsameWRTE(true);
-    setNoLess1("1");
-    setNoMore1("3");
-    setNoLess2("1");
-    setNoMore2("3");
+    props.setDeleteCorrelation(props.data);
 
   }
 
   return (
-    <div className="secondary">
+    <div className="secondary correlation-border-top">
       {/* <div> */}
       <div>
         <strong style={{ marginRight: "14px" }}>Secondary Stack:</strong>{" "}
@@ -211,23 +170,23 @@ function Secondary(props) {
       </div>
       <div className="secondary-list">
         <div>
-          <input type="checkbox" checked={RBOppWRTE} onChange={handleRBOppWRTE}/>{" "}
+          <input type="checkbox" checked={props.data.flags[0] === 1? true: false} onChange={handleRBOppWRTE}/>{" "}
           <strong>RB + Opposing team pass catcher (WR,TE)</strong>
         </div>
         <div>
-          <input type="checkbox" checked={WROppWRTE} onChange={handleWROppWRTE}/>{" "}
+          <input type="checkbox" checked={props.data.flags[1] === 1? true: false} onChange={handleWROppWRTE}/>{" "}
           <strong>WR + Opposing team pass catcher (WR,TE)</strong>
         </div>
         <div>
-          <input type="checkbox" checked={RBWRsame} onChange={handleRBWRsame}/> 
+          <input type="checkbox" checked={props.data.flags[2] === 1? true: false} onChange={handleRBWRsame}/> 
           <strong>RB + WR same team</strong>
         </div>
         <div>
-          <input type="checkbox" checked={RBDEFsame} onChange={handleRBDEFsame}/> 
+          <input type="checkbox" checked={props.data.flags[3] === 1? true: false} onChange={handleRBDEFsame}/> 
           <strong>RB + DEF same team</strong>
         </div>
         <div>
-          <input type="checkbox" checked={WRTEsameWRTE} onChange={handleWRTEsameWRTE}/>{" "}
+          <input type="checkbox" checked={props.data.flags[4] === 1? true: false} onChange={handleWRTEsameWRTE}/>{" "}
           <strong>Pass catcher (WR,TE) + pass catcher (WR,TE) same team</strong>
         </div>
       </div>
@@ -247,16 +206,16 @@ function Secondary(props) {
             <strong className="correlation-position-wrapper">QB</strong>
             <select
               className="dropdown"
-              value={QBPlayer}
+              value={props.data.player}
               onChange={handleQBPlayerSelected}
               style={{ color: "#000", fontSize: "13px", width: "18.75rem" }}
             >
-              <option value="none" disabled selected>
+              <option value="none" disabled>
                 select players
               </option>
               {props.total.map((item, index) => {
                 if(item.position === "QB"){
-                  return <option key={index} value={item.name}>{item.name}</option>
+                  return <option key={index} value={item.name} disabled>{item.name}</option>
                 }
                 else{
                   return null;
@@ -266,8 +225,9 @@ function Secondary(props) {
             <strong>in min</strong>
             <input
               type="text"
-              value={numOfLineups}
+              value={props.data.min_lineups}
               onChange={handleNumOfLineups}
+              disabled
               className="correlation-position-wrapper"
               style={{ backgroundColor: "#fff", width: "64px" }}
             />
@@ -298,23 +258,23 @@ function Secondary(props) {
             <select
               className="dropdown"
               style={{ fontSize: "13px", width: "8rem", marginLeft: "10px" }}
-              value={noLess1}
+              value={props.data.team_constraint.No_less_than}
               onChange={noLess1Handler}
             >
-              <option value="1" selected>1 player</option>
-              <option value="2">2 player</option>
-              <option value="3">3 player</option>
+              <option value="1" disabled>1 player</option>
+              <option value="2" disabled>2 player</option>
+              <option value="3" disabled>3 player</option>
             </select>
             <strong>No more than</strong>
             <select
               className="dropdown"
               style={{ fontSize: "13px", width: "8rem", marginLeft: "10px" }}
-              value={noMore1}
+              value={props.data.team_constraint.No_more_than}
               onChange={noMore1handler}
             >
-              <option value="1">1 player</option>
-              <option value="2">2 player</option>
-              <option value="3" selected>3 player</option>
+              <option value="1" disabled>1 player</option>
+              <option value="2" disabled>2 player</option>
+              <option value="3" disabled>3 player</option>
             </select>
             <strong>of</strong>
             <strong
@@ -343,23 +303,23 @@ function Secondary(props) {
             <select
               className="dropdown"
               style={{ fontSize: "13px", width: "8rem", marginLeft: "10px" }}
-              value={noLess2}
+              value={props.data.opp_team_constraint.No_less_than}
               onChange={noLess2Handler}
             >
-              <option value="1" selected>1 player</option>
-              <option value="2">2 player</option>
-              <option value="3">3 player</option>
+              <option value="1" disabled>1 player</option>
+              <option value="2" disabled>2 player</option>
+              <option value="3" disabled>3 player</option>
             </select>
             <strong>No more than</strong>
             <select
               className="dropdown"
               style={{ fontSize: "13px", width: "8rem", marginLeft: "10px" }}
-              value={noMore2}
+              value={props.data.opp_team_constraint.No_more_than}
               onChange={noMore2Handler}
             >
-              <option value="1">1 player</option>
-              <option value="2">2 player</option>
-              <option value="3" selected>3 player</option>
+              <option value="1" disabled>1 player</option>
+              <option value="2" disabled>2 player</option>
+              <option value="3" disabled>3 player</option>
             </select>
             <strong>of</strong>
             <strong
@@ -389,7 +349,6 @@ function Secondary(props) {
               {props.total.map((data, index) => {
                   if(data.team === team && playersPosition.includes(data.position)){
                     return <SecondaryPlayerPanel key={index} data={data}/>
-                    {/* console.log(data); */}
                   }
                   else return null;
               })}
@@ -408,7 +367,6 @@ function Secondary(props) {
             </div>
           }
         </div>
-        <Button varient="primary" onClick={addValues}>add secondary</Button>
         {/* </div>s */}
       </div>
       <style jsx>{`

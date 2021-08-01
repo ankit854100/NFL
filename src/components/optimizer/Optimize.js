@@ -522,9 +522,11 @@ function Optimize(props) {
         "opposite_team": teamVsAgainst
       }
 
+      // console.log(arr);
+
       axios.post("http://127.0.0.1:8000/items/",  JSON.stringify(arr), {headers:{"Content-Type" : "application/json"}})
       .then((response) => {
-        console.log("response: ",response.data);
+        // console.log("response: ",response.data);
         if(response.data.is_optimised){
           response.data.lineups.forEach(lineup => {
 
@@ -556,7 +558,7 @@ function Optimize(props) {
       .catch((err) => {
         console.log("error from optimizer", err);
         setIsDataReceived(true);
-        alert("Has no optimal solution for the given constraints and players");
+        alert("Server error");
       });
     }
 
@@ -573,7 +575,7 @@ function Optimize(props) {
 
   return (
     <div className="optimizer">
-    <a id="downloadAnchorElem" style={{display:"none"}}></a>
+    {/* <a id="downloadAnchorElem" style={{display:"none"}}></a> */}
       <div className="optimizer-left">
         <div className="optimizer-top">
           <div className="first-col">

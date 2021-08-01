@@ -59,7 +59,7 @@ function reducer(state = initialState, action){
 
         case DELETE_CORRELATION: return{
             ...state,
-            correlationArray: []
+            correlationArray: handleDelete(state.correlationArray, action.payload)
         }
 
         case CLEAR_STACKING: return {
