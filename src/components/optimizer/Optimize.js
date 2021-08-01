@@ -522,11 +522,11 @@ function Optimize(props) {
         "opposite_team": teamVsAgainst
       }
 
-      console.log(arr);
+      console.log(arr); 
 
       axios.post("http://3.237.171.68/items/",  JSON.stringify(arr), {headers:{"Content-Type" : "application/json"}})
       .then((response) => {
-        // console.log("response: ",response.data);
+        console.log("response: ",response.data);
         if(response.data.is_optimised){
           response.data.lineups.forEach(lineup => {
 

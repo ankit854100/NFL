@@ -118,7 +118,7 @@ function Combination(props) {
   }
 
   function callWhenAnd(){
-    if(player1.length < parseInt(number2) || player2.length < parseInt(number4)){
+    if(player1.length < parseInt(number2) || player2.length < parseInt(number4) ){
       alert("please select appropriate number of players or clear the list and choose again");
     }
     else if(checkArray(player1, player2)){
