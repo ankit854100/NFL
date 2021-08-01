@@ -553,6 +553,7 @@ function Optimize(props) {
         }
         else{
           alert("choose constraints correctly");
+          setIsDataReceived(true);
         }
       })
       .catch((err) => {

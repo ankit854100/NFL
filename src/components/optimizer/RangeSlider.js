@@ -32,13 +32,15 @@ export default function RangeSlider(props) {
       <div className="input-range-container">
         <input
           className="range"
-          type="text"
+          type="number"
+          step={0.1}
           value={value[0]}
           onChange={onChangeLow}
         />
         <input
           className="range"
-          type="text"
+          type="number"
+          step={0.1}
           value={value[1]}
           onChange={onChangeHigh}
         />
