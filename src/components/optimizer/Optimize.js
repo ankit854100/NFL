@@ -524,7 +524,7 @@ function Optimize(props) {
 
       console.log(arr); 
 
-      axios.post("http://ec2-3-237-171-68.compute-1.amazonaws.com/items/",  JSON.stringify(arr), {headers:{"Content-Type" : "application/json"}})
+      axios.post("http://ec2-3-231-152-209.compute-1.amazonaws.com/items/",  JSON.stringify(arr), {headers:{"Content-Type" : "application/json"}})
       .then((response) => {
         console.log("response: ",response.data);
         if(response.data.is_optimised){
