@@ -561,22 +561,22 @@ function Optimize(props) {
         setIsDataReceived(true);
         alert("Server error");
       });
+
+      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(arr));
+      var dlAnchorElem = document.getElementById('downloadAnchorElem');
+      dlAnchorElem.setAttribute("href",     dataStr     );
+      dlAnchorElem.setAttribute("download", "optimizer_input.json");
+      dlAnchorElem.click();
     }
 
     // console.log(arr);
-
-    // var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(arr));
-    // var dlAnchorElem = document.getElementById('downloadAnchorElem');
-    // dlAnchorElem.setAttribute("href",     dataStr     );
-    // dlAnchorElem.setAttribute("download", "optimizer_input.json");
-    // dlAnchorElem.click();
 
     // // console.log(arr);
   }
 
   return (
     <div className="optimizer">
-    {/* <a id="downloadAnchorElem" style={{display:"none"}}></a> */}
+    <a id="downloadAnchorElem" style={{display:"none"}}></a>
       <div className="optimizer-left">
         <div className="optimizer-top">
           <div className="first-col">
