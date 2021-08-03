@@ -3,7 +3,7 @@ import {  CLEAR_STACKING, COMBINATION, CORRELATION, CORRELATION_ARRAY, DELETE_CO
 
 const initialState = {
     correlationArray: [],
-    correlation: 1,
+    correlation: 0,
     legacy: [],
     perTeam: [],
     combination: []
@@ -64,7 +64,7 @@ function reducer(state = initialState, action){
 
         case CLEAR_STACKING: return {
             correlationArray: [],
-            correlation: 1,
+            correlation: 0,
             legacy: [],
             perTeam: [],
             combination: []

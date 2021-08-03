@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import "./stacking.css";
 import {connect} from "react-redux";
 import Secondary from "./Secondary";
@@ -25,7 +25,11 @@ function Correlation(props) {
   const [correlation, setCorrelation] = useState(false);
   // const [rules, setRules] = useState([]);
   const [second, setSecond] = useState(false);
-  const [primary, setPrimary] = useState(true);
+  const [primary, setPrimary] = useState(false);
+
+  useEffect(() => {
+    setPrimary(false);
+  }, [props.total]);
 
   function handleCorrelation() {
     setCorrelation(!correlation);
