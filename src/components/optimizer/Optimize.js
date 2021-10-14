@@ -523,8 +523,8 @@ function Optimize(props) {
       }
 
       console.log(arr); 
-
-      axios.post("http://ec2-3-231-152-209.compute-1.amazonaws.com/items/",  JSON.stringify(arr), {headers:{"Content-Type" : "application/json"}})
+      // http://ec2-3-231-152-209.compute-1.amazonaws.com/items/
+      axios.post("http://127.0.0.1:8000/items/",  JSON.stringify(arr), {headers:{"Content-Type" : "application/json"}})
       .then((response) => {
         console.log("response: ",response.data);
         if(response.data.is_optimised){
@@ -563,11 +563,11 @@ function Optimize(props) {
       });
 
 
-    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(arr));
-    var dlAnchorElem = document.getElementById('downloadAnchorElem');
-    dlAnchorElem.setAttribute("href",     dataStr     );
-    dlAnchorElem.setAttribute("download", "optimizer_input.json");
-    dlAnchorElem.click();
+    // var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(arr));
+    // var dlAnchorElem = document.getElementById('downloadAnchorElem');
+    // dlAnchorElem.setAttribute("href",     dataStr     );
+    // dlAnchorElem.setAttribute("download", "optimizer_input.json");
+    // dlAnchorElem.click();
     }
 
     // console.log(arr);
