@@ -1,5 +1,13 @@
 # NFL Fantasy Gaming Website 🏈
 
+## Important Notes
+
+- **Platform Compatibility:**
+  - The NFL Fantasy Gaming Website is optimized for web browsers. Please note that mobile screens are not supported.
+
+- **API Access:**
+  - Ensure a seamless experience by installing the [All CORS Browser Extension](https://chromewebstore.google.com/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf?pli=1) as the website's API relies on it for proper functioning.
+
 [![Website Preview]](https://nfl-silk.vercel.app/)
 
 ## Overview
@@ -9,14 +17,6 @@ Welcome to the NFL Fantasy Gaming Website, where you can immerse yourself in the
 ## Video Preview
 
 https://github.com/ankit854100/NFL/assets/46422401/90531064-6d99-416a-a7c0-a641bb732079
-
-## Important Notes
-
-- **Platform Compatibility:**
-  - The NFL Fantasy Gaming Website is optimized for web browsers. Please note that mobile screens are not supported.
-
-- **API Access:**
-  - Ensure a seamless experience by installing the [All CORS Browser Extension](https://chromewebstore.google.com/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf?pli=1) as the website's API relies on it for proper functioning.
 
 ## Features
 
